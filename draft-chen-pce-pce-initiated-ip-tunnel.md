@@ -7,8 +7,8 @@ category: std
 submissionType: IETF
 
 ipr: trust200902
-area: Routing Area
-workgroup: pce
+area: "Routing"
+workgroup: "Path Computation Element"
 keyword: Internet-Draft
 
 coding: us-ascii
