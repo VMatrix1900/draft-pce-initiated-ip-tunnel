@@ -1,0 +1,2271 @@
+<!DOCTYPE html>
+<html lang="en" class="Internet-Draft">
+<head>
+<meta charset="utf-8">
+<meta content="Common,Latin" name="scripts">
+<meta content="initial-scale=1.0" name="viewport">
+<title>PCE-initiated IP Tunnel</title>
+<meta content="Xia Chen" name="author">
+<meta content="Hang Shi" name="author">
+<meta content="Zhenbin Li" name="author">
+<meta content="
+       This document specifies a set of extensions to PCEP to support PCE-initiated IP Tunnel to satisfy the requirement which is introduced in  .  The extensions include the setup, maintenance and teardown of PCE-initiated IP Tunnels, without the need for local configuration on the PCC. 
+    " name="description">
+<meta content="xml2rfc 3.17.4" name="generator">
+<meta content="Internet-Draft" name="keyword">
+<meta content="draft-chen-pce-pce-initiated-ip-tunnel-latest" name="ietf.draft">
+<!-- Generator version information:
+  xml2rfc 3.17.4
+    Python 3.11.4
+    ConfigArgParse 1.5.3
+    google-i18n-address 3.1.0
+    intervaltree 3.1.0
+    Jinja2 3.1.2
+    lxml 4.9.2
+    platformdirs 3.8.0
+    pycountry 22.3.5
+    PyYAML 6.0
+    requests 2.31.0
+    setuptools 67.7.2
+    six 1.16.0
+    wcwidth 0.2.6
+-->
+<link href="draft-chen-pce-pce-initiated-ip-tunnel.xml" rel="alternate" type="application/rfc+xml">
+<link href="#copyright" rel="license">
+<style type="text/css">@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-cyrillic.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-cyrillic.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Lora SemiBold'), local('Lora-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-semibold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Cabin Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Cabin Condensed SemiBold'), local('CabinCondensed-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/cabincondensed-semibold-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Cabin Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Cabin Condensed SemiBold'), local('CabinCondensed-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/cabincondensed-semibold-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Cabin Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Cabin Condensed SemiBold'), local('CabinCondensed-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/cabincondensed-semibold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Oxygen Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Oxygen Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  color-scheme: light dark;
+  --background-color: #fff;
+  --text-color: #222;
+  --title-color: #191919;
+  --link-color: #2a6496;
+  --highlight-color: #f9f9f9;
+  --line-color: #eee;
+  --pilcrow-weak: #ddd;
+  --pilcrow-strong: #bbb;
+  --small-font-size: 14.5px;
+  --font-mono: 'Oxygen Mono', monospace;
+  scrollbar-color: #bbb #eee;
+}
+body {
+  max-width: 600px;
+  margin: 75px auto;
+  padding: 0 5px;
+  color: var(--text-color);
+  background-color: var(--background-color);
+  font: 16px/22px "Lora", serif;
+  scroll-behavior: smooth;
+}
+
+.ears {
+  display: none;
+}
+
+/* headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Cabin Condensed", sans-serif;
+  font-weight: 600;
+  margin: 0.8em 0 0.3em;
+  font-size-adjust: 0.5;
+  color: var(--title-color);
+}
+h1#title {
+  font-size: 32px;
+  line-height: 40px;
+  clear: both;
+}
+h1#title, h1#rfcnum {
+  margin: 1.5em 0 0.2em;
+}
+h1#rfcnum + h1#title {
+  margin: 0.2em 0;
+}
+
+h1, h2, h3 {
+  font-size: 22px;
+  line-height: 27px;
+}
+h4, h5, h6 {
+  font-size: 20px;
+  line-height: 24px;
+}
+
+/* general structure */
+.author {
+  padding-bottom: 0.3em;
+}
+#abstract+p {
+  font-size: 18px;
+  line-height: 24px;
+}
+#abstract+p code, #abstract+p samp, #abstract+p tt {
+  font-size: 16px;
+  line-height: 0;
+}
+
+p {
+  padding: 0;
+  margin: 0.5em 0;
+  text-align: left;
+}
+div {
+  margin: 0;
+}
+.alignRight.art-text {
+  background-color: var(--highlight-color);
+  border: 1px solid var(--line-color);
+  border-radius: 3px;
+  padding: 0.5em 1em 0;
+  margin-bottom: 0.5em;
+}
+.alignRight.art-text pre {
+  padding: 0;
+  width: auto;
+}
+.alignRight {
+  margin: 1em 0;
+}
+.alignRight > *:first-child {
+  border: none;
+  margin: 0;
+  float: right;
+  clear: both;
+}
+.alignRight > *:nth-child(2) {
+  clear: both;
+  display: block;
+  border: none;
+}
+svg {
+  display: block;
+}
+/* font-family isn't space-separated, but =~ will have to do */
+svg[font-family~="monospace" i], svg [font-family~="monospace" i] {
+  font-family: var(--font-mono);
+}
+.alignCenter.art-text {
+  background-color: var(--highlight-color);
+  border: 1px solid var(--line-color);
+  border-radius: 3px;
+  padding: 0.5em 1em 0;
+  margin-bottom: 0.5em;
+}
+.alignCenter.art-text pre {
+  padding: 0;
+  width: auto;
+}
+.alignCenter {
+  margin: 1em 0;
+}
+.alignCenter > *:first-child {
+  border: none;
+  /* this isn't optimal, but it's an existence proof.  PrinceXML doesn't
+     support flexbox yet.
+  */
+  display: table;
+  margin: 0 auto;
+}
+
+/* lists */
+ol, ul {
+  padding: 0;
+  margin: 0 0 0.5em 2em;
+}
+:is(ol, ul) :is(ol, ul) {
+  margin-left: 1em;
+}
+li {
+  margin: 0 0 0.25em 0;
+}
+.ulCompact li {
+  margin: 0;
+}
+ul.empty, .ulEmpty {
+  list-style-type: none;
+}
+ul.empty li, .ulEmpty li {
+  margin-top: 0.5em;
+}
+:is(ul, ol).compact, .ulCompact, .olCompact {
+  line-height: 1;
+  margin: 0 0 0 2em;
+}
+
+/* definition lists */
+dl {
+  clear: left;
+  --indent: 3ch;
+  /* --indent: attr(indent ch); not supported in any browser, but we can dream */
+}
+dl.olPercent {
+  --indent: 5ch;
+}
+dl > dt {
+  float: left;
+  margin-right: 2ch;
+  min-width: 8ch;
+}
+dl.dlNewline > dt {
+  float: none;
+}
+dl > dd {
+  margin-bottom: .8em;
+  margin-left: var(--indent) !important; /* stupid element overrides */
+  min-height: 2ex;
+}
+dl.olPercent > dt {
+  min-width: calc(var(--indent) - 2ch);
+}
+:is(dl.compact, .dlCompact) > dd {
+  margin-bottom: 0;
+}
+:is(dl.compact, .dlCompact) > dd > :is(:first-child, .break:first-child + *) {
+  margin-top: 0;
+}
+:is(dl.compact, .dlCompact) > dd > :is(:last-child) {
+  margin-bottom: 0;
+}
+dl > dd > dl {
+  margin-top: 0.5em;
+  margin-bottom: 0;
+}
+:is(dd, span).break {
+  display: none;
+}
+
+/* links */
+a, a[href].selfRef:hover {
+  text-decoration: none;
+}
+a[href] {
+  color: var(--link-color);
+}
+a[href].selfRef, .iref + a[href].internal {
+  color: var(--text-color);
+}
+a[href]:hover {
+  text-decoration: underline;
+}
+a[href].selfRef:hover {
+  background-color: var(--highlight-color);
+}
+a.xref:is(.cite, .auto), :is(#status-of-memo, #copyright) a {
+  white-space: nowrap;
+}
+
+/* Figures */
+tt, code, pre {
+  background-color: var(--highlight-color);
+  font: 14px/22px var(--font-mono);
+}
+tt, code {
+  /* changing the font for inline elements leads to different ascender
+     and descender heights; as we want to retain baseline alignment,
+     remove leading to avoid altering the final height of lines
+     note: this fails if these blocks take an entire line,
+     a different solution would be great */
+  line-height: 0;
+}
+:is(h1, h2, h3, h4, h5, h6) :is(tt, code) {
+  font-size: 84%;
+}
+pre {
+  border: 1px solid var(--line-color);
+  font-size: 13.5px;
+  line-height: 16px;
+  letter-spacing: -0.2px;
+  margin: 5px;
+  padding: 5px;
+}
+img {
+  max-width: 100%;
+}
+figure {
+  margin: 0.5em 0;
+  padding: 0;
+}
+figure blockquote {
+  margin: 0.8em 0.4em 0.4em;
+}
+figcaption, caption {
+  font-style: italic;
+  margin: 0.5em 1.5em;
+  text-align: left;
+}
+@media screen {
+  /* Auto-collapse boilerplate. */
+  :is(#status-of-memo, #copyright) p {
+    margin: -2px 0;
+    max-height: 0;
+    transition: max-height 2s ease, margin 0.5s ease 0.5s;
+    overflow: hidden;
+  }
+  :is(#status-of-memo, #copyright):hover p,
+  :is(#status-of-memo, #copyright) h2:target ~ p {
+    margin: 0.5em 0;
+    max-height: 500px;
+    overflow: auto;
+  }
+  pre, svg {
+    display: inline-block;
+    overflow-x: auto;
+  }
+  pre {
+    max-width: 100%;
+    width: calc(100% - 22px - 1em);
+  }
+  svg {
+    max-width: calc(100% - 22px - 1em);
+  }
+  figure pre {
+    display: block;
+    width: calc(100% - 25px);
+  }
+  :is(pre, svg) + .pilcrow {
+    display: inline-block;
+    vertical-align: text-bottom;
+    padding-bottom: 8px;
+  }
+}
+
+/* aside, blockquote */
+aside, blockquote {
+  margin-left: 0;
+  padding: 0 2em;
+  font-style: italic;
+}
+blockquote {
+  margin: 1em 0;
+}
+cite {
+  display: block;
+  text-align: right;
+  font-style: italic;
+}
+
+/* tables */
+table {
+  max-width: 100%;
+  margin: 0 0 1em;
+  border-collapse: collapse;
+}
+table.right {
+  margin-left: auto;
+}
+table.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+table.left {
+  margin-right: auto;
+}
+thead, tbody {
+  border: 1px solid var(--line-color);
+}
+th, td {
+  text-align: left;
+  vertical-align: top;
+  padding: 5px 10px;
+}
+th {
+  background-color: var(--line-color);
+}
+:is(tr:nth-child(2n), thead+tbody > tr:nth-child(2n+1)) > td {
+  background-color: var(--background-color);
+}
+:is(tr:nth-child(2n+1), thead+tbody > tr:nth-child(2n)) > td {
+  background-color: var(--highlight-color);
+}
+table caption {
+  margin: 0;
+  padding: 3px 0 3px 1em;
+}
+table p {
+  margin: 0;
+}
+
+/* pilcrow */
+a.pilcrow {
+  margin-left: 3px;
+  opacity: 0.2;
+  user-select: none;
+}
+a.pilcrow[href] { color: var(--pilcrow-weak); }
+a.pilcrow[href]:hover { text-decoration: none; }
+@media not print {
+  :hover > a.pilcrow {
+    opacity: 1;
+  }
+  a.pilcrow[href]:hover {
+    color: var(--pilcrow-strong);
+    background-color: transparent;
+  }
+}
+@media print {
+  a.pilcrow {
+    display: none;
+  }
+}
+
+/* misc */
+hr {
+  border: 0;
+  border-top: 1px solid var(--line-color);
+}
+.bcp14 {
+  font-variant: small-caps;
+  font-weight: 600;
+  font-size: var(--small-font-size);
+}
+.role {
+  font-variant: all-small-caps;
+}
+sub, sup {
+  line-height: 1;
+  font-size: 80%;
+}
+
+/* info block */
+#identifiers {
+  margin: 0;
+  font-size: var(--small-font-size);
+  line-height: 18px;
+  --identifier-width: 15ch;
+}
+#identifiers dt {
+  width: var(--identifier-width);
+  min-width: var(--identifier-width);
+  clear: left;
+  float: left;
+  text-align: right;
+  margin-right: 1ch;
+}
+#identifiers dd {
+  margin: 0;
+  margin-left: calc(1em + var(--identifier-width)) !important;
+  min-width: 5em;
+}
+#identifiers .authors .author {
+  display: inline-block;
+  margin-right: 1.5em;
+}
+#identifiers .authors .org {
+  font-style: italic;
+}
+
+/* The prepared/rendered info at the very bottom of the page */
+.docInfo {
+  color: #999;
+  font-size: 0.9em;
+  font-style: italic;
+  margin-top: 2em;
+}
+.docInfo .prepared {
+  float: left;
+}
+.docInfo .prepared {
+  float: right;
+}
+
+/* table of contents */
+#toc {
+  padding: 0.75em 0 2em 0;
+  margin-bottom: 1em;
+}
+#toc nav ul {
+  margin: 0 0.5em 0 0;
+  padding: 0;
+  list-style: none;
+}
+#toc nav li {
+  line-height: 1.3em;
+  margin: 0.75em 0;
+  padding-left: 1.2em;
+  text-indent: -1.2em;
+}
+#toc a.xref {
+  white-space: normal;
+}
+/* references */
+.references dt {
+  text-align: right;
+  font-weight: bold;
+  min-width: 10ch;
+  margin-right: 1.5ch;
+}
+.references dt:target::before {
+  content: "⇒";
+  width: 15px;
+  margin: 0 10px 0 -25px;
+}
+.references dd {
+  margin-left: 12ch !important;
+  overflow: auto;
+}
+
+.refInstance {
+  margin-bottom: 1.25em;
+}
+
+.references .ascii {
+  margin-bottom: 0.25em;
+}
+
+/* index */
+#rfc\.index\.index + ul {
+  margin-left: 0;
+}
+
+/* authors */
+address.vcard {
+  font-style: normal;
+  margin: 1em 0;
+}
+address.vcard .nameRole {
+  font-weight: 700;
+  margin-left: 0;
+}
+address.vcard .label {
+  margin: 0.5em 0;
+}
+address.vcard .type {
+  display: none;
+}
+.alternative-contact {
+  margin: 1.5em 0 1em;
+}
+hr.addr {
+  border-top: 1px dashed;
+  margin: 0;
+  color: #ddd;
+  max-width: calc(100% - 16px);
+}
+@media (min-width: 500px) {
+  #authors-addresses > section {
+    column-count: 2;
+    column-gap: 20px;
+  }
+  #authors-addresses > section > h2 {
+    column-span: all;
+  }
+  /* hack for break-inside: avoid-column */
+  #authors-addresses address {
+    display: inline-block;
+    break-inside: avoid-column;
+  }
+}
+
+.rfcEditorRemove p:first-of-type {
+  font-style: italic;
+}
+.cref {
+  background-color: rgba(249, 232, 105, 0.3);
+  padding: 2px 4px;
+}
+.crefSource {
+  font-style: italic;
+}
+/* alternative layout for smaller screens */
+@media screen and (max-width: 929px) {
+  #toc {
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    right: 0;
+    padding: 0;
+    margin: 0;
+    border-bottom: 1px solid #ccc;
+    opacity: 0.6;
+  }
+  #toc.active {
+      opacity: 1;
+  }
+  #toc h2 {
+    margin: 0;
+    padding: 2px 0 2px 6px;
+    padding-right: 1em;
+    font-size: 18px;
+    line-height: 24px;
+    min-width: 190px;
+    text-align: right;
+    background-color: #444;
+    color: white;
+    cursor: pointer;
+  }
+  #toc h2::before { /* css hamburger */
+    float: right;
+    position: relative;
+    width: 1em;
+    height: 1px;
+    left: -164px;
+    margin: 8px 0 0 0;
+    background: white none repeat scroll 0 0;
+    box-shadow: 0 4px 0 0 white, 0 8px 0 0 white;
+    content: "";
+  }
+  #toc nav {
+    display: none;
+    background-color: var(--background-color);
+    padding: 0.5em 1em 1em;
+    overflow: auto;
+    overscroll-behavior: contain;
+    height: calc(100vh - 48px);
+    border-left: 1px solid #ddd;
+  }
+  #toc.active nav {
+    display: block;
+  }
+  /* Make the collapsed ToC header render white on gray also when it's a link */
+  #toc h2 a,
+  #toc h2 a:link,
+  #toc h2 a:focus,
+  #toc h2 a:hover,
+  #toc a.toplink,
+  #toc a.toplink:hover {
+    color: white;
+    background-color: #444;
+    text-decoration: none;
+  }
+  #toc a.toplink {
+    margin-top: 2px;
+  }
+}
+
+/* alternative layout for wide screens */
+@media screen and (min-width: 930px) {
+  body {
+    padding-right: 360px;
+    padding-right: calc(min(180px + 20%, 500px));
+  }
+  #toc {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    right: calc(50vw - 480px);
+    width: 312px;
+    margin: 0;
+    padding: 0;
+    z-index: 1;
+  }
+  #toc h2 {
+    margin: 0;
+    padding: 0.25em 1em 1em 0;
+  }
+  #toc nav {
+    display: block;
+    height: calc(90vh - 84px);
+    bottom: 0;
+    padding: 0.5em 0 2em;
+    overflow: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+  }
+  #toc nav > ul  {
+    margin-bottom: 2em;
+  }
+  #toc ul {
+    margin: 0 0 0 4px;
+    font-size: var(--small-font-size);
+  }
+  #toc ul :is(p, li) {
+    margin: 2px 0;
+    line-height: 22px;
+  }
+  img { /* future proofing */
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* pagination */
+@media print {
+  body {
+    width: 100%;
+  }
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+  #n-copyright-notice {
+    border-bottom: none;
+  }
+  #toc, #n-introduction {
+    page-break-before: always;
+  }
+  #toc {
+    border-top: none;
+    padding-top: 0;
+  }
+  figure, pre {
+    page-break-inside: avoid;
+  }
+  figure {
+    overflow: scroll;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+  h2+*, h3+*, h4+*, h5+*, h6+* {
+    page-break-before: avoid;
+  }
+  pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 10pt;
+  }
+  table {
+    border: 1px solid #ddd;
+  }
+  td {
+    border-top: 1px solid #ddd;
+  }
+}
+
+@page :first {
+  padding-top: 0;
+  @top-left {
+    content: normal;
+    border: none;
+  }
+  @top-center {
+    content: normal;
+    border: none;
+  }
+  @top-right {
+    content: normal;
+    border: none;
+  }
+}
+
+@page {
+  size: A4;
+  margin-bottom: 45mm;
+  padding-top: 20px;
+}
+
+/* Changes introduced to fix issues found during implementation */
+
+/* Separate body from document info even without intervening H1 */
+section {
+  clear: both;
+}
+
+/* Top align author divs, to avoid names without organization dropping level with org names */
+.author {
+  vertical-align: top;
+}
+
+/* Style section numbers with more space between number and title */
+.section-number {
+  padding-right: 0.5em;
+}
+
+/* Add styling for a link in the ToC that points to the top of the document */
+a.toplink {
+  float: right;
+  margin: 8px 0.5em 0;
+}
+
+/* Provide styling for table cell text alignment */
+table .text-left {
+  text-align: left;
+}
+table .text-center {
+  text-align: center;
+}
+table .text-right {
+  text-align: right;
+}
+
+/* Make the alternative author contact information look less like just another
+   author, and group it closer with the primary author contact information */
+.alternative-contact {
+  margin: 0.5em 0 0.25em 0;
+}
+address .non-ascii {
+  margin: 0 0 0 2em;
+}
+
+/* With it being possible to set tables with alignment
+  left, center, and right, { width: 100%; } does not make sense */
+table {
+  width: auto;
+}
+
+/* Avoid reference text that sits in a block with very wide left margin,
+   because of a long floating dt label.*/
+.references dd {
+  overflow: visible;
+}
+
+/* Control caption placement */
+caption {
+  caption-side: bottom;
+}
+
+/* Limit the width of the author address vcard, so names in right-to-left
+   script don't end up on the other side of the page. */
+
+address.vcard {
+  max-width: 20em;
+  margin-right: auto;
+}
+
+/* For address alignment dependent on LTR or RTL scripts */
+address div.left {
+  text-align: left;
+}
+address div.right {
+  text-align: right;
+}
+
+/* Give the table caption label the same styling as the figcaption */
+
+@media print {
+  .toplink {
+    display: none;
+  }
+
+  /* avoid overwriting the top border line with the ToC header */
+  #toc {
+    padding-top: 1px;
+  }
+
+  /* Avoid page breaks inside dl and author address entries */
+  dd {
+    page-break-before: avoid;
+  }
+  .vcard {
+    page-break-inside: avoid;
+  }
+
+}
+
+/* Dark mode. */
+@media (prefers-color-scheme: dark) {
+:root {
+  --background-color: #121212;
+  --text-color: #f0f0f0;
+  --title-color: #fff;
+  --link-color: #4da4f0;
+  --highlight-color: #282828;
+  --line-color: #444;
+  --pilcrow-weak: #444;
+  --pilcrow-strong: #666;
+  scrollbar-color: #777 #333;
+}
+}
+
+/* SVG Trick: a prefix match works because only black and white are allowed */
+svg :is([stroke="black"], [stroke^="#000"]) {
+  stroke: var(--text-color);
+}
+svg :is([stroke="white"], [stroke^="#fff"]) {
+  stroke: var(--background-color);
+}
+svg :is([fill="black"], [fill^="#000"], :not([fill])) {
+  fill: var(--text-color);
+}
+svg :is([fill="white"], [fill^="#fff"]) {
+  fill: var(--background-color);
+}
+</style>
+
+</head>
+<body class="xml2rfc">
+<table class="ears">
+<thead><tr>
+<td class="left">Internet-Draft</td>
+<td class="center">PCE IP Tunnel</td>
+<td class="right">July 2023</td>
+</tr></thead>
+<tfoot><tr>
+<td class="left">Chen, et al.</td>
+<td class="center">Expires 11 January 2024</td>
+<td class="right">[Page]</td>
+</tr></tfoot>
+</table>
+<div id="external-metadata" class="document-information"></div>
+<div id="internal-metadata" class="document-information">
+<dl id="identifiers">
+<dt class="label-workgroup">Workgroup:</dt>
+<dd class="workgroup">Path Computation Element</dd>
+<dt class="label-internet-draft">Internet-Draft:</dt>
+<dd class="internet-draft">draft-chen-pce-pce-initiated-ip-tunnel-latest</dd>
+<dt class="label-published">Published:</dt>
+<dd class="published">
+<time datetime="2023-07-10" class="published">10 July 2023</time>
+    </dd>
+<dt class="label-intended-status">Intended Status:</dt>
+<dd class="intended-status">Standards Track</dd>
+<dt class="label-expires">Expires:</dt>
+<dd class="expires"><time datetime="2024-01-11">11 January 2024</time></dd>
+<dt class="label-authors">Authors:</dt>
+<dd class="authors">
+<div class="author">
+      <div class="author-name">X. Chen</div>
+<div class="org">Huawei Technologies</div>
+</div>
+<div class="author">
+      <div class="author-name">H. Shi, <span class="editor">Ed.</span>
+</div>
+<div class="org">Huawei Technologies</div>
+</div>
+<div class="author">
+      <div class="author-name">Z. Li</div>
+<div class="org">Huawei Technologies</div>
+</div>
+</dd>
+</dl>
+</div>
+<h1 id="title">PCE-initiated IP Tunnel</h1>
+<section id="section-abstract">
+      <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
+<p id="section-abstract-1">This document specifies a set of extensions to PCEP to support PCE-initiated IP Tunnel to satisfy the requirement which is introduced in <span>[<a href="#I-D.li-spring-tunnel-segment" class="cite xref">I-D.li-spring-tunnel-segment</a>]</span>.  The extensions include the setup, maintenance and teardown of PCE-initiated IP Tunnels, without the need for local configuration on the PCC.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+</section>
+<section class="note rfcEditorRemove" id="section-note.1">
+      <h2 id="name-discussion-venues">
+<a href="#name-discussion-venues" class="section-name selfRef">Discussion Venues</a>
+      </h2>
+<p id="section-note.1-1">This note is to be removed before publishing as an RFC.<a href="#section-note.1-1" class="pilcrow">¶</a></p>
+<p id="section-note.1-2">Discussion of this document takes place on the
+    Path Computation Element Working Group mailing list (pce@ietf.org),
+    which is archived at <span><a href="https://mailarchive.ietf.org/arch/browse/pce/">https://mailarchive.ietf.org/arch/browse/pce/</a></span>.<a href="#section-note.1-2" class="pilcrow">¶</a></p>
+<p id="section-note.1-3">Source for this draft and an issue tracker can be found at
+    <span><a href="https://github.com/VMatrix1900/draft-pce-initiated-ip-tunnel">https://github.com/VMatrix1900/draft-pce-initiated-ip-tunnel</a></span>.<a href="#section-note.1-3" class="pilcrow">¶</a></p>
+</section>
+<div id="status-of-memo">
+<section id="section-boilerplate.1">
+        <h2 id="name-status-of-this-memo">
+<a href="#name-status-of-this-memo" class="section-name selfRef">Status of This Memo</a>
+        </h2>
+<p id="section-boilerplate.1-1">
+        This Internet-Draft is submitted in full conformance with the
+        provisions of BCP 78 and BCP 79.<a href="#section-boilerplate.1-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-2">
+        Internet-Drafts are working documents of the Internet Engineering Task
+        Force (IETF). Note that other groups may also distribute working
+        documents as Internet-Drafts. The list of current Internet-Drafts is
+        at <span><a href="https://datatracker.ietf.org/drafts/current/">https://datatracker.ietf.org/drafts/current/</a></span>.<a href="#section-boilerplate.1-2" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-3">
+        Internet-Drafts are draft documents valid for a maximum of six months
+        and may be updated, replaced, or obsoleted by other documents at any
+        time. It is inappropriate to use Internet-Drafts as reference
+        material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-4">
+        This Internet-Draft will expire on 11 January 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="copyright">
+<section id="section-boilerplate.2">
+        <h2 id="name-copyright-notice">
+<a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
+        </h2>
+<p id="section-boilerplate.2-1">
+            Copyright (c) 2023 IETF Trust and the persons identified as the
+            document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.2-2">
+            This document is subject to BCP 78 and the IETF Trust's Legal
+            Provisions Relating to IETF Documents
+            (<span><a href="https://trustee.ietf.org/license-info">https://trustee.ietf.org/license-info</a></span>) in effect on the date of
+            publication of this document. Please review these documents
+            carefully, as they describe your rights and restrictions with
+            respect to this document. Code Components extracted from this
+            document must include Revised BSD License text as described in
+            Section 4.e of the Trust Legal Provisions and are provided without
+            warranty as described in the Revised BSD License.<a href="#section-boilerplate.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="toc">
+<section id="section-toc.1">
+        <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents">
+<a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a>
+        </h2>
+<nav class="toc"><ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1">
+            <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="auto internal xref">1</a>.  <a href="#name-introduction" class="internal xref">Introduction</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2">
+            <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-terminology" class="internal xref">Terminology</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.1">
+                <p id="section-toc.1-1.2.2.1.1" class="keepWithNext"><a href="#section-2.1" class="auto internal xref">2.1</a>.  <a href="#name-requirements-language" class="internal xref">Requirements Language</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
+            <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-procedures-for-pce-initiate" class="internal xref">Procedures for PCE-initiated IP Tunnel</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1">
+                <p id="section-toc.1-1.3.2.1.1"><a href="#section-3.1" class="auto internal xref">3.1</a>.  <a href="#name-overview-of-procedures" class="internal xref">Overview of Procedures</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2">
+                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="auto internal xref">3.2</a>.  <a href="#name-capability-advertisement" class="internal xref">Capability Advertisement</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3">
+                <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="auto internal xref">3.3</a>.  <a href="#name-tunnel-operations" class="internal xref">Tunnel Operations</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3.2.1">
+                    <p id="section-toc.1-1.3.2.3.2.1.1"><a href="#section-3.3.1" class="auto internal xref">3.3.1</a>.  <a href="#name-pce-ip-tunnel-instantiation" class="internal xref">PCE IP Tunnel Instantiation</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3.2.2">
+                    <p id="section-toc.1-1.3.2.3.2.2.1"><a href="#section-3.3.2" class="auto internal xref">3.3.2</a>.  <a href="#name-pce-ip-tunnel-update" class="internal xref">PCE IP Tunnel Update</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3.2.3">
+                    <p id="section-toc.1-1.3.2.3.2.3.1"><a href="#section-3.3.3" class="auto internal xref">3.3.3</a>.  <a href="#name-pce-ip-tunnel-deletion" class="internal xref">PCE IP Tunnel Deletion</a></p>
+</li>
+                </ul>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-pcep-messages" class="internal xref">PCEP Messages</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1">
+                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="auto internal xref">4.1</a>.  <a href="#name-pctunnelinitiate-message" class="internal xref">PCTunnelInitiate Message</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2">
+                <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="auto internal xref">4.2</a>.  <a href="#name-pctunnelupd-message" class="internal xref">PCTunnelUpd Message</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.3">
+                <p id="section-toc.1-1.4.2.3.1"><a href="#section-4.3" class="auto internal xref">4.3</a>.  <a href="#name-pctunnelrpt-message" class="internal xref">PCTunnelRpt Message</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-pcep-objects" class="internal xref">PCEP Objects</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
+                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-open-object" class="internal xref">OPEN Object</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1.2.1">
+                    <p id="section-toc.1-1.5.2.1.2.1.1"><a href="#section-5.1.1" class="auto internal xref">5.1.1</a>.  <a href="#name-pce-initiated-tunnel-capabi" class="internal xref">PCE Initiated Tunnel Capability TLV</a></p>
+</li>
+                </ul>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
+                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-srp-object" class="internal xref">SRP Object</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.3">
+                <p id="section-toc.1-1.5.2.3.1"><a href="#section-5.3" class="auto internal xref">5.3</a>.  <a href="#name-tunnel-object" class="internal xref">TUNNEL Object</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.3.2.1">
+                    <p id="section-toc.1-1.5.2.3.2.1.1"><a href="#section-5.3.1" class="auto internal xref">5.3.1</a>.  <a href="#name-tunnel-identifier-tlv" class="internal xref">Tunnel Identifier TLV</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.3.2.2">
+                    <p id="section-toc.1-1.5.2.3.2.2.1"><a href="#section-5.3.2" class="auto internal xref">5.3.2</a>.  <a href="#name-tunnel-name-tlv" class="internal xref">Tunnel Name TLV</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.3.2.3">
+                    <p id="section-toc.1-1.5.2.3.2.3.1"><a href="#section-5.3.3" class="auto internal xref">5.3.3</a>.  <a href="#name-tunnel-parameter-tlv" class="internal xref">Tunnel Parameter TLV</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.3.2.4">
+                    <p id="section-toc.1-1.5.2.3.2.4.1"><a href="#section-5.3.4" class="auto internal xref">5.3.4</a>.  <a href="#name-tunnel-attribute-tlv" class="internal xref">Tunnel Attribute TLV</a></p>
+</li>
+                </ul>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-references" class="internal xref">References</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1">
+                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="auto internal xref">8.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2">
+                <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="auto internal xref">8.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
+            <p id="section-toc.1-1.9.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
+</li>
+        </ul>
+</nav>
+</section>
+</div>
+<div id="introduction">
+<section id="section-1">
+      <h2 id="name-introduction">
+<a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
+      </h2>
+<p id="section-1-1"><span>[<a href="#I-D.li-spring-tunnel-segment" class="cite xref">I-D.li-spring-tunnel-segment</a>]</span> introduces a new type of segment, Tunnel Segment, for the segment routing.  Tunnel segment can be used to reduce SID stack depth of SR path, span the non-SR domain or provide differentiated services. The tunnel segment can be allocated for MPLS RSVP-TE tunnel, SR-TE tunnel or IP tunnel. IP tunnel is also useful in SD-WAN scenario.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2"><span>[<a href="#I-D.li-spring-tunnel-segment" class="cite xref">I-D.li-spring-tunnel-segment</a>]</span> introduces two ways to set up the tunnel which is used as tunnel segment: one is to configure tunnel on the device, the other is PCE-initiated tunnel.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3"><span>[<a href="#RFC8231" class="cite xref">RFC8231</a>]</span>, <span>[<a href="#RFC8281" class="cite xref">RFC8281</a>]</span> and <span>[<a href="#RFC8664" class="cite xref">RFC8664</a>]</span> has defined how to set up the PCE initiated RSVP-TE LSP and SR-TE LSP.  This document specifies a set of extensions to PCEP to support PCE-initiated IP Tunnel. The extensions include the setup, maintenance and teardown of PCE-initiated IP Tunnels, without the need for local configuration on the PCC.<a href="#section-1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="terminology">
+<section id="section-2">
+      <h2 id="name-terminology">
+<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-terminology" class="section-name selfRef">Terminology</a>
+      </h2>
+<ul class="normal">
+<li class="normal" id="section-2-1.1">SR: Segment Routing<a href="#section-2-1.1" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-2-1.2">SR-TE: Segment Routing Traffic Engineering<a href="#section-2-1.2" class="pilcrow">¶</a>
+</li>
+      </ul>
+<p id="section-2-2">This document uses the terms defined in <span>[<a href="#RFC5440" class="cite xref">RFC5440</a>]</span>: PCC, PCE, PCEP
+   Peer.<a href="#section-2-2" class="pilcrow">¶</a></p>
+<p id="section-2-3">The following terms are defined in <span>[<a href="#RFC8281" class="cite xref">RFC8281</a>]</span>:<a href="#section-2-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2-4.1">PCE-initiated LSP: LSP that is instantiated as a result of a request
+   from the PCE.<a href="#section-2-4.1" class="pilcrow">¶</a>
+</li>
+      </ul>
+<p id="section-2-5">The following terms are defined in this document:<a href="#section-2-5" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2-6.1">IP Tunnel: Tunnel that uses IP encapsulation.<a href="#section-2-6.1" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-2-6.2">PCE-initiated IP Tunnel: IP Tunnel that is instantiated as a result
+   of a request from the PCE.<a href="#section-2-6.2" class="pilcrow">¶</a>
+</li>
+      </ul>
+<p id="section-2-7">The message formats in this document are specified using Routing
+   Backus-Naur Format (RBNF) encoding as specified in <span>[<a href="#RFC5511" class="cite xref">RFC5511</a>]</span>.<a href="#section-2-7" class="pilcrow">¶</a></p>
+<div id="requirements-language">
+<section id="section-2.1">
+        <h3 id="name-requirements-language">
+<a href="#section-2.1" class="section-number selfRef">2.1. </a><a href="#name-requirements-language" class="section-name selfRef">Requirements Language</a>
+        </h3>
+<p id="section-2.1-1">The key words "<span class="bcp14">MUST</span>", "<span class="bcp14">MUST NOT</span>", "<span class="bcp14">REQUIRED</span>", "<span class="bcp14">SHALL</span>", "<span class="bcp14">SHALL NOT</span>", "<span class="bcp14">SHOULD</span>", "<span class="bcp14">SHOULD NOT</span>", "<span class="bcp14">RECOMMENDED</span>", "<span class="bcp14">NOT RECOMMENDED</span>",
+"<span class="bcp14">MAY</span>", and "<span class="bcp14">OPTIONAL</span>" in this document are to be interpreted as
+described in BCP14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</span> <span>[<a href="#RFC8174" class="cite xref">RFC8174</a>]</span> when, and only when, they
+appear in all capitals, as shown here.<a href="#section-2.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="procedures-for-pce-initiated-ip-tunnel">
+<section id="section-3">
+      <h2 id="name-procedures-for-pce-initiate">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-procedures-for-pce-initiate" class="section-name selfRef">Procedures for PCE-initiated IP Tunnel</a>
+      </h2>
+<div id="overview-of-procedures">
+<section id="section-3.1">
+        <h3 id="name-overview-of-procedures">
+<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-overview-of-procedures" class="section-name selfRef">Overview of Procedures</a>
+        </h3>
+<p id="section-3.1-1">A PCC or PCE indicates its ability to support PCE Initiated dynamic
+   tunnel during the PCEP Initialization Phase via "PCE Initiated Tunnel
+   Capability" TLV (see details in <a href="#tunnel-cap" class="auto internal xref">Section 5.1</a>).<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.1-2">In this document the procedure is only about PCE Initiated dynamic IP
+   Tunnel.  The decision when to instantiate or delete a PCE-initiated
+   IP Tunnel is out of the scope of this document.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
+<p id="section-3.1-3">This section introduces the procedure to support PCE provisioned IP
+   Tunnel as follows:<a href="#section-3.1-3" class="pilcrow">¶</a></p>
+<p id="section-3.1-4">Firstly both the PCC and the PCE negotiate the PCE Initiated Tunnel
+   Capability for tunnel types during the PCE session initiation phase.
+   On the PCEP session with PCE Initiated Tunnel Capability PCE
+   communicates with PCC to set up, maintain and tear down PCE-initiated
+   IP Tunnels.<a href="#section-3.1-4" class="pilcrow">¶</a></p>
+<p id="section-3.1-5">The procedure about tunnel state synchronization, PCC local policy
+   and timeout process, the session failure process, etc. will be
+   specified in the future version.<a href="#section-3.1-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="capability-advertisement">
+<section id="section-3.2">
+        <h3 id="name-capability-advertisement">
+<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-capability-advertisement" class="section-name selfRef">Capability Advertisement</a>
+        </h3>
+<p id="section-3.2-1">During PCEP session establishment, both the PCC and the PCE must
+   announce their support of PCEP extensions defined in this document.
+   A PCEP Speaker (PCE or PCC) includes the "PCE Initiated Tunnel
+   Capability" TLV, described in <a href="#tunnel-cap" class="auto internal xref">Section 5.1</a>, in the OPEN Object to
+   advertise its support for PCEP extensions for PCE Initiated IP Tunnel
+   Capability.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.2-2">The PCE Initiated Tunnel Capability TLV includes the tunnel types
+   that are supported by PCEP Speaker.  Each tunnel type is indicated by
+   one bit.<a href="#section-3.2-2" class="pilcrow">¶</a></p>
+<p id="section-3.2-3">The presence of the PCE Initiated Tunnel Capability TLV in PCE's OPEN
+   message indicates that the PCE can support the instantiation of PCE-
+   initiated Tunnels and the types of the tunnels which PCE can
+   initiate.<a href="#section-3.2-3" class="pilcrow">¶</a></p>
+<p id="section-3.2-4">The presence of such Capability TLV in PCC's OPEN Object indicates
+   that the PCC can support to instantiate the tunnel according to the
+   PCE's indication and the types of the tunnels which PCC can setup
+   automatically according to the PCE's request.<a href="#section-3.2-4" class="pilcrow">¶</a></p>
+<p id="section-3.2-5">If PCE has such capability TLV and PCC has no such capability TLV PCE
+   <span class="bcp14">MUST NOT</span> send the PCE messages for procedure of PCE initiated IP
+   Tunnel.  And if PCC receives such messages it should send PCErr
+   message to PCE.<a href="#section-3.2-5" class="pilcrow">¶</a></p>
+<p id="section-3.2-6">If both PCE and PCC have such capability TLV they only negotiate the
+   types of the tunnels both PCE and PCC can support.  PCE <span class="bcp14">MUST</span> only
+   initiate the specific tunnel which both PCE and PCC can support.
+   Otherwise PCC <span class="bcp14">MUST</span> send the PCErr message.<a href="#section-3.2-6" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="tunnel-operations">
+<section id="section-3.3">
+        <h3 id="name-tunnel-operations">
+<a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-tunnel-operations" class="section-name selfRef">Tunnel Operations</a>
+        </h3>
+<div id="pce-ip-tunnel-instantiation">
+<section id="section-3.3.1">
+          <h4 id="name-pce-ip-tunnel-instantiation">
+<a href="#section-3.3.1" class="section-number selfRef">3.3.1. </a><a href="#name-pce-ip-tunnel-instantiation" class="section-name selfRef">PCE IP Tunnel Instantiation</a>
+          </h4>
+<p id="section-3.3.1-1">To instantiate a tunnel, the PCE sends a Path Computation Tunnel
+   Initiate (PCTunnelInitiate) message to the PCC.  The PCTunnelInitiate
+   message <span class="bcp14">MUST</span> include the SRP object (see details in <a href="#srp" class="auto internal xref">Section 5.2</a>) and
+   TUNNEL object (see details in <a href="#tunnel-obj" class="auto internal xref">Section 5.3</a>) . The TUNNEL object <span class="bcp14">MUST</span>
+   have a PTUNNEL-ID of 0 and <span class="bcp14">MUST</span> include the Tunnel Identifier TLV
+   with the TUNNEL-ID 0 and the Tunnel Name TLV.  The TUNNEL object <span class="bcp14">MAY</span>
+   have the Tunnel Parameter TLV.<a href="#section-3.3.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.3.1-2">The PCC creates the different type of tunnel using the end point
+   address carried in Tunnel Identifier TLV and sends the Path
+   Computation Tunnel State Report (PCTunneRpt) message to PCE.  The
+   PCTunneRpt message <span class="bcp14">MUST</span> include the SRP object and TUNNEL object.
+   PCC assigns a unique PTUNNEL-ID carried via TUNNEL object and a
+   unique TUNNEL-ID carried via Tunnel Identifier TLV(see details in
+   <a href="#tunnel-obj" class="auto internal xref">Section 5.3</a>) in TUNNEL object for the tunnel.  PCC indicates the
+   operational state in the TUNNEL object.<a href="#section-3.3.1-2" class="pilcrow">¶</a></p>
+<p id="section-3.3.1-3">The PCTunneRpt message <span class="bcp14">MUST</span> include the SRP object, with the SRP-ID-
+   NUMBER used in the SRP object of the PCTunnelInitiate message.<a href="#section-3.3.1-3" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.3.1-4">
+<pre>
+                  +-+-+                    +-+-+
+                  |PCE|                    |PCC|
+                  +-+-+                    +-+-+
+                    |                        |
+1) add new tunnel   |-- PCTunnelInitiate --&gt; |
+                    |    PTUNNEL-ID=0,       |
+                    |     TUNNEL-ID=0        |
+                    |         R=0            |
+                    |            .           |
+                    |                        |
+                    |&lt;---- PCTunneRpt  ------| 2) Tunnel Status Report sent
+                    |    PTUNNEL-ID=1,       |
+                    |     TUNNEL-ID=1        |
+                    |           Up           |
+                    |                        |
+</pre><a href="#section-3.3.1-4" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="pce-ip-tunnel-update">
+<section id="section-3.3.2">
+          <h4 id="name-pce-ip-tunnel-update">
+<a href="#section-3.3.2" class="section-number selfRef">3.3.2. </a><a href="#name-pce-ip-tunnel-update" class="section-name selfRef">PCE IP Tunnel Update</a>
+          </h4>
+<p id="section-3.3.2-1">To update the parameters used to create a tunnel, the PCE sends a
+   Path Computation Tunnel Update (PCTunnelUpd) message to the PCC.  The
+   PCTunnelUpd message <span class="bcp14">MUST</span> include the SRP object and TUNNEL object.
+   The TUNNEL object <span class="bcp14">MUST</span> have specific PTUNNEL-ID and <span class="bcp14">MUST</span> have
+   specific Tunnel Identifier TLV.  The TUNNEL object <span class="bcp14">MUST</span> carry any of
+   the Tunnel Parameter TLV and Tunnel Attribute TLV.<a href="#section-3.3.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.3.2-2">The PCC updates the encapsulation parameters and/or attributes of the
+   tunnel and PCC sends the PCTunneRpt message to PCE to report updated
+   state.<a href="#section-3.3.2-2" class="pilcrow">¶</a></p>
+<p id="section-3.3.2-3">The PCTunneRpt message <span class="bcp14">MUST</span> include the SRP object, with the SRP-ID-
+   NUMBER used in the SRP object of the PCTunnelUpd message.<a href="#section-3.3.2-3" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.3.2-4">
+<pre>
+                  +-+-+                    +-+-+
+                  |PCE|                    |PCC|
+                  +-+-+                    +-+-+
+                    |                        |
+1) update tunnel    |----  PCTunnelUpd ----&gt; |
+   parameter        |    PTUNNEL-ID=1,       |
+                    |     TUNNEL-ID=1        |
+                    |            .           |
+                    |                        |
+                    |&lt;---- PCTunneRpt  ------| 2) Tunnel Status Report sent
+                    |    PTUNNEL-ID=1,       |
+                    |     TUNNEL-ID=1        |
+                    |           Up           |
+                    |                        |
+</pre><a href="#section-3.3.2-4" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="pce-ip-tunnel-deletion">
+<section id="section-3.3.3">
+          <h4 id="name-pce-ip-tunnel-deletion">
+<a href="#section-3.3.3" class="section-number selfRef">3.3.3. </a><a href="#name-pce-ip-tunnel-deletion" class="section-name selfRef">PCE IP Tunnel Deletion</a>
+          </h4>
+<p id="section-3.3.3-1">To delete a tunnel, the PCE sends a Path Computation Tunnel Initiate
+   (PCTunnelInitiate) message to the PCC.  The PCTunnelInitiate message
+   <span class="bcp14">MUST</span> include the SRP object and TUNNEL object and the 'R' flag in SRP
+   object <span class="bcp14">SHOULD</span> be set.  The TUNNEL object <span class="bcp14">MUST</span> have specific PTUNNEL-
+   ID and <span class="bcp14">MUST</span> have specific Tunnel Identifier TLV.<a href="#section-3.3.3-1" class="pilcrow">¶</a></p>
+<p id="section-3.3.3-2">The PCC delete the tunnel specified by PTUNNEL-ID and PCC sends the
+   PCTunneRpt message to PCE to report updated state.<a href="#section-3.3.3-2" class="pilcrow">¶</a></p>
+<p id="section-3.3.3-3">The PCTunneRpt message <span class="bcp14">MUST</span> include the SRP object, with the SRP-ID-
+   NUMBER used in the SRP object of the PCTunnelInitiate message.<a href="#section-3.3.3-3" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.3.3-4">
+<pre>
+                  +-+-+                    +-+-+
+                  |PCE|                    |PCC|
+                  +-+-+                    +-+-+
+                    |                        |
+1) delete tunnel    |-- PCTunnelInitiate --&gt; |
+                    |    PTUNNEL-ID=1,       |
+                    |     TUNNEL-ID=1        |
+                    |         R=1            |
+                    |            .           |
+                    |                        |
+                    |&lt;---- PCTunneRpt  ------| 2) Tunnel Status Report sent
+                    |    PTUNNEL-ID=1,       |
+                    |     TUNNEL-ID=1        |
+                    |           DOWN         |
+                    |                        |
+</pre><a href="#section-3.3.3-4" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+</section>
+</div>
+</section>
+</div>
+<div id="pcep-messages">
+<section id="section-4">
+      <h2 id="name-pcep-messages">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-pcep-messages" class="section-name selfRef">PCEP Messages</a>
+      </h2>
+<p id="section-4-1">To initiate a tunnel, a PCE sends a PCTunnelInitiate message to a
+   PCC.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<p id="section-4-2">To report the state of a tunnel, a PCC sends a PCTunnelRpt message to
+   a PCE.<a href="#section-4-2" class="pilcrow">¶</a></p>
+<p id="section-4-3">To modify the parameters of a tunnel, a PCE sends a PCTunnelUpd
+   message to a PCC.<a href="#section-4-3" class="pilcrow">¶</a></p>
+<p id="section-4-4">The message format, objects and TLVs are discussed separately below
+   for the creation and the deletion cases.<a href="#section-4-4" class="pilcrow">¶</a></p>
+<div id="pctunnelinitiate-message">
+<section id="section-4.1">
+        <h3 id="name-pctunnelinitiate-message">
+<a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-pctunnelinitiate-message" class="section-name selfRef">PCTunnelInitiate Message</a>
+        </h3>
+<p id="section-4.1-1">A Path Computation Tunnel Initiate message which is also referred to
+   as PCTunnelInitiate message is a PCEP message sent by a PCE to a PCC
+   to trigger tunnel instantiation or deletion.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
+<p id="section-4.1-2">The Message-Type field of the PCEP common header for the
+   PCTunnelInitiate message is to be assigned by IANA.  The
+   PCTunnelInitiate message <span class="bcp14">MUST</span> include the SRP and the TUNNEL objects.
+   If the SRP object is missing, the PCC <span class="bcp14">MUST</span> send a PCErr with error-
+   type 6 (Mandatory Object missing) and error-value=10 (SRP Object
+   missing) (per <span>[<a href="#RFC8231" class="cite xref">RFC8231</a>]</span>).  If the TUNNEL object is
+   missing, the PCC <span class="bcp14">MUST</span> send a PCErr with error-type 6 (Mandatory
+   Object missing) and error-value which means TUNNEL Object missing.<a href="#section-4.1-2" class="pilcrow">¶</a></p>
+<p id="section-4.1-3">Tunnel instantiation is done by sending an Tunnel Initiate Message
+   with an TUNNEL object with the reserved PTUNNEL-ID 0.  Tunnel
+   deletion is done by sending an Tunnel Initiate Message with an TUNNEL
+   object carrying the PTUNNEL-ID of the tunnel to be removed and an SRP
+   object with the R flag set.<a href="#section-4.1-3" class="pilcrow">¶</a></p>
+<p id="section-4.1-4">The format of a PCTunnelInitiate message for tunnel instantiation is
+   as follows:<a href="#section-4.1-4" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-4.1-5">
+<pre>
+   &lt;PCTunnelInitiate Message&gt; ::= &lt;Common Header&gt;
+                                  &lt;PCE-initiated-tunnel-list&gt;
+Where:
+   &lt;PCE-initiated-tunnel-list&gt; ::= &lt;PCE-initiated-tunnel-request&gt;
+                                   [&lt;PCE-initiated-tunnel-request&gt;]
+   &lt;PCE-initiated-tunnel-request&gt; ::= (&lt;PCE-initiated-tunnel-instantiation&gt;
+                                       |&lt;PCE-initiated-tunnel-deletion&gt;)
+   &lt;PCE-initiated-tunnel-instantiation&gt; ::= &lt;SRP&gt;
+                                            &lt;TUNNEL&gt;
+   &lt;PCE-initiated-tunnel-deletion&gt; ::= &lt;SRP&gt;
+                                       &lt;TUNNEL&gt;
+</pre><a href="#section-4.1-5" class="pilcrow">¶</a>
+</div>
+<p id="section-4.1-6">The SRP object defined in <span>[<a href="#RFC8231" class="cite xref">RFC8231</a>]</span> can be used in
+   this document to correlate tunnel initiate requests and update
+   requests sent by the PCE with the error reports and tunnel state
+   reports sent by the PCC.  Every request from the PCE sends a new SRP-
+   ID-NUMBER.  This number is unique per PCEP session and is incremented
+   each time an operation (initiation, update, etc) is requested from
+   the PCE.  The value of the SRP-ID-NUMBER <span class="bcp14">MUST</span> be echoed back by the
+   PCC in PCErr and PCTunnelRpt messages to allow for correlation
+   between requests made by the PCE and errors or state reports
+   generated by the PCC.  Procedure of PCE-initiated IP Tunnel share the
+   same number space of the SRP-ID-NUMBER with procedure of stateful
+   PCE.<a href="#section-4.1-6" class="pilcrow">¶</a></p>
+<p id="section-4.1-7">The &lt;TUNNEL&gt; object is an new object introduced in this document.
+   &lt;TUNNEL&gt; object in PCTunnelInitiate message <span class="bcp14">MUST</span> include Tunnel
+   Identifier TLV and Tunnel Name TLV.  Tunnel Parameter TLV is
+   optionally included.<a href="#section-4.1-7" class="pilcrow">¶</a></p>
+<p id="section-4.1-8">The Tunnel Initiate message for tunnel instantiation has the TUNNEL
+   object with the TUNNEL-ID in Tunnel Identifier TLV 0.  The Tunnel
+   Initiate message for tunnel deletion has the TUNNEL object carrying
+   the TUNNEL-ID of the TUNNEL to be removed.<a href="#section-4.1-8" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="pctunnelupd-message">
+<section id="section-4.2">
+        <h3 id="name-pctunnelupd-message">
+<a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-pctunnelupd-message" class="section-name selfRef">PCTunnelUpd Message</a>
+        </h3>
+<p id="section-4.2-1">A Path Computation Tunnel Update Request message (also referred to as
+   PCTunnelUpd message) is a PCEP message sent by a PCE to a PCC to
+   update the encapsulation parameters and/or attributes of a tunnel.  A
+   PCTunnelUpd message can carry more than one Tunnel Update Request.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
+<p id="section-4.2-2">The Message-Type field of the PCEP common header for the PCUpd
+   message is to be assigned by IANA.<a href="#section-4.2-2" class="pilcrow">¶</a></p>
+<p id="section-4.2-3">The PCTunnelUpd message <span class="bcp14">MUST</span> include the SRP and the TUNNEL objects.
+   If the SRP object is missing, the PCC <span class="bcp14">MUST</span> send a PCErr with error-
+   type 6 (Mandatory Object missing) and error-value=10 (SRP Object
+   missing) (per <span>[<a href="#RFC8231" class="cite xref">RFC8231</a>]</span>).  If the TUNNEL object is
+   missing, the PCC <span class="bcp14">MUST</span> send a PCErr with error-type 6 (Mandatory
+   Object missing) and error-value which means TUNNEL Object missing.<a href="#section-4.2-3" class="pilcrow">¶</a></p>
+<p id="section-4.2-4">The format of a PCTunnelUpd message for tunnel parameter update is as
+   follows:<a href="#section-4.2-4" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-4.2-5">
+<pre>
+      &lt;PCETunnelUpd Message&gt; ::= &lt;Common Header&gt;
+                                 &lt;tunnel-update-request-list&gt;
+   Where:
+      &lt;tunnel-update-request-list&gt; ::= &lt;tunnel-update-request&gt;
+                                       [&lt;tunnel-update-request-list&gt;]
+      &lt;tunnel-update-request&gt; ::= &lt;SRP&gt;
+                                  &lt;TUNNEL&gt;
+</pre><a href="#section-4.2-5" class="pilcrow">¶</a>
+</div>
+<p id="section-4.2-6">&lt;TUNNEL&gt; object in PCTunnelUpd message <span class="bcp14">MUST</span> include Tunnel Identifier
+   TLV and any of Tunnel Parameter TLV and Tunnel Attribute TLV.  Tunnel
+   Name TLV is not included.<a href="#section-4.2-6" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="pctunnelrpt-message">
+<section id="section-4.3">
+        <h3 id="name-pctunnelrpt-message">
+<a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-pctunnelrpt-message" class="section-name selfRef">PCTunnelRpt Message</a>
+        </h3>
+<p id="section-4.3-1">A Path Computation Tunnel State Report message which is also referred
+   to as PCTunnelRpt message is a PCEP message sent by a PCC to a PCE to
+   report the current state of a tunnel.  A PCTunnelRpt message can
+   carry more than one Tunnel State Reports.  A PCC sends an Tunnel
+   State Report in response to a Tunnel Initiate Request for creation or
+   a Tunnel Update Request from a PCE.<a href="#section-4.3-1" class="pilcrow">¶</a></p>
+<p id="section-4.3-2">The Message-Type field of the PCEP common header for the PCTunnelRpt
+   message is to be assigned by IANA.  The PCTunnelRpt message <span class="bcp14">MUST</span>
+   include the SRP and the TUNNEL objects.  If the SRP object is
+   missing, the PCE <span class="bcp14">MUST</span> send a PCErr with error-type 6 (Mandatory
+   Object missing) and error-value=10 (SRP Object missing) (per
+   <span>[<a href="#RFC8231" class="cite xref">RFC8231</a>]</span>).  If the TUNNEL object is missing, the
+   PCE <span class="bcp14">MUST</span> send a PCErr with error-type 6 (Mandatory Object missing)
+   and error-value which means TUNNEL Object missing.<a href="#section-4.3-2" class="pilcrow">¶</a></p>
+<p id="section-4.3-3">The format of a PCTunnelRpt message for tunnel instantiation is as
+   follows:<a href="#section-4.3-3" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-4.3-4">
+<pre>
+      &lt;PCTunnelRpt Message&gt; ::= &lt;Common Header&gt;
+                                &lt;tunnel-state-report-list&gt;
+   Where:
+      &lt;tunnel-state-report-list&gt; ::= &lt;tunnel-state-report&gt;
+                                     [&lt;tunnel-state-report-list&gt;]
+      &lt;tunnel-state-report&gt; ::= &lt;SRP&gt;
+                                &lt;TUNNEL&gt;
+</pre><a href="#section-4.3-4" class="pilcrow">¶</a>
+</div>
+<p id="section-4.3-5">&lt;TUNNEL&gt; object in PCTunnelRpt message <span class="bcp14">MUST</span> include Tunnel Identifier
+   TLV.<a href="#section-4.3-5" class="pilcrow">¶</a></p>
+<p id="section-4.3-6">Tunnel Parameter TLV and Tunnel Attribute TLV is optionally included
+   in PCTunnelRpt message.  In the first PCTunnelRpt message in response
+   to the PCTunnelInitiate message Tunnel Name TLV <span class="bcp14">MUST</span> be included.
+   And in the subsequent PCTunnelRpt message Tunnel Name TLV is
+   optionally included.<a href="#section-4.3-6" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="pcep-objects">
+<section id="section-5">
+      <h2 id="name-pcep-objects">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-pcep-objects" class="section-name selfRef">PCEP Objects</a>
+      </h2>
+<div id="tunnel-cap">
+<section id="section-5.1">
+        <h3 id="name-open-object">
+<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-open-object" class="section-name selfRef">OPEN Object</a>
+        </h3>
+<div id="pce-initiated-tunnel-capability-tlv">
+<section id="section-5.1.1">
+          <h4 id="name-pce-initiated-tunnel-capabi">
+<a href="#section-5.1.1" class="section-number selfRef">5.1.1. </a><a href="#name-pce-initiated-tunnel-capabi" class="section-name selfRef">PCE Initiated Tunnel Capability TLV</a>
+          </h4>
+<p id="section-5.1.1-1">The PCE-INITIATE-TUNNEL-CAPABILITY TLV is an optional TLV associated
+   with the OPEN Object <span>[<a href="#RFC5440" class="cite xref">RFC5440</a>]</span> to exchange PCE-initiated tunnel
+   capability of PCEP speakers.<a href="#section-5.1.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.1.1-2">Its format is shown in the following figure:<a href="#section-5.1.1-2" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.1.1-3">
+<pre>
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |               Type=[TBD]      |            Length=4           |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                             Tunnel Types                      |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</pre><a href="#section-5.1.1-3" class="pilcrow">¶</a>
+</div>
+<p id="section-5.1.1-4">The type of the TLV is to be assigned by IANA and it has a fixed
+   length of 4 octets.<a href="#section-5.1.1-4" class="pilcrow">¶</a></p>
+<p id="section-5.1.1-5">The value comprises a single field - Tunnel Types (32 bits):<a href="#section-5.1.1-5" class="pilcrow">¶</a></p>
+<p id="section-5.1.1-6">Each bit indicates one kind of tunnel.  Each bit from right to left
+   successively represents the value of tunnel type which is 0 to 31.
+   The value of tunnel types refer to the registry for "BGP Tunnel
+   Encapsulation Attribute Tunnel Types" <span>[<a href="#RFC9012" class="cite xref">RFC9012</a>]</span> assigned by IANA.
+   This document only use the IP tunnel type.<a href="#section-5.1.1-6" class="pilcrow">¶</a></p>
+<p id="section-5.1.1-7">The assignments used by this document are as follows:<a href="#section-5.1.1-7" class="pilcrow">¶</a></p>
+<span id="name-tunnel-type"></span><div id="tunnel-type">
+<table class="center" id="table-1">
+            <caption>
+<a href="#table-1" class="selfRef">Table 1</a>:
+<a href="#name-tunnel-type" class="selfRef">Tunnel Type</a>
+            </caption>
+<thead>
+              <tr>
+                <th class="text-right" rowspan="1" colspan="1">Tunnel Type</th>
+                <th class="text-left" rowspan="1" colspan="1">Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-right" rowspan="1" colspan="1">Reserved</td>
+                <td class="text-left" rowspan="1" colspan="1">0</td>
+              </tr>
+              <tr>
+                <td class="text-right" rowspan="1" colspan="1">GRE</td>
+                <td class="text-left" rowspan="1" colspan="1">2</td>
+              </tr>
+              <tr>
+                <td class="text-right" rowspan="1" colspan="1">VXLAN</td>
+                <td class="text-left" rowspan="1" colspan="1">8</td>
+              </tr>
+              <tr>
+                <td class="text-right" rowspan="1" colspan="1">NVGRE</td>
+                <td class="text-left" rowspan="1" colspan="1">9</td>
+              </tr>
+              <tr>
+                <td class="text-right" rowspan="1" colspan="1">MPLS in GRE</td>
+                <td class="text-left" rowspan="1" colspan="1">11</td>
+              </tr>
+              <tr>
+                <td class="text-right" rowspan="1" colspan="1">MPLS in UDP</td>
+                <td class="text-left" rowspan="1" colspan="1">13</td>
+              </tr>
+            </tbody>
+          </table>
+</div>
+<p id="section-5.1.1-9">Unassigned bits are considered reserved.  They <span class="bcp14">MUST</span> be set to 0 on
+   transmission and <span class="bcp14">MUST</span> be ignored on receipt.<a href="#section-5.1.1-9" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="srp">
+<section id="section-5.2">
+        <h3 id="name-srp-object">
+<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-srp-object" class="section-name selfRef">SRP Object</a>
+        </h3>
+<p id="section-5.2-1">&lt;SRP&gt; object is defined in <span>[<a href="#RFC8231" class="cite xref">RFC8231</a>]</span>.  In this
+   document &lt;SRP&gt; is used to correlate PCTunnelInitiate and PCTunnelRpt
+   or PCErr message.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
+<p id="section-5.2-2">'R' Flag in &lt;SRP&gt; object is defined in
+   <span>[<a href="#RFC8281" class="cite xref">RFC8281</a>]</span>.  When PCE requests PCC to create
+   the IP tunnel 'R' Flag in &lt;SRP&gt; is set to 0.  When PCE requests PCC
+   to delete the IP tunnel 'R' Flag in &lt;SRP&gt; is set to 1.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
+<p id="section-5.2-3">Other flags must be set to 0 and if PCC receive the PCTunnelInitiate
+   message with other reserved flags in &lt;SRP&gt; set to 1 PCC will send
+   the PCErr message.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
+<p id="section-5.2-4">In procedure of PCE-initiated IP tunnel &lt;SRP&gt; object carries no
+   optional TLVs.<a href="#section-5.2-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="tunnel-obj">
+<section id="section-5.3">
+        <h3 id="name-tunnel-object">
+<a href="#section-5.3" class="section-number selfRef">5.3. </a><a href="#name-tunnel-object" class="section-name selfRef">TUNNEL Object</a>
+        </h3>
+<p id="section-5.3-1">The TUNNEL object <span class="bcp14">MUST</span> be present within PCTunnelInitiate,
+   PCTunnelRpt and PCTunnelUpd messages.  The TUNNEL object contains a
+   set of fields used to specify the target tunnel, the flags to
+   indicate the state of the tunnel or operation to be performed on the
+   tunnel and TLVs.<a href="#section-5.3-1" class="pilcrow">¶</a></p>
+<p id="section-5.3-2">TUNNEL Object-Class is to be assigned by IANA.<a href="#section-5.3-2" class="pilcrow">¶</a></p>
+<p id="section-5.3-3">TUNNEL Object-Type is 1.<a href="#section-5.3-3" class="pilcrow">¶</a></p>
+<p id="section-5.3-4">The format of the TUNNEL object body is shown in following Figure:<a href="#section-5.3-4" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.3-5">
+<pre>
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                PTUNNEL-ID                     |  Flag   |    O|
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   //                        TLVs                                 //
+   |                                                               |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</pre><a href="#section-5.3-5" class="pilcrow">¶</a>
+</div>
+<p id="section-5.3-6">PTUNNEL-ID (24 bits): A PCEP-specific identifier for the tunnel.  A
+   PCC creates a unique PTUNNEL-ID for each tunnel that is constant for
+   the lifetime of a PCEP session.  The PCC will advertise the same
+   PTUNNEL-ID on all PCEP sessions.  The mapping of the Tunnel Name to
+   PTUNNEL-ID is communicated to the PCE by sending a PCTunnelRpt
+   message containing the TUNNEL-NAME TLV.  All subsequent PCEP messages
+   then address the tunnel by the PTUNNEL-ID.  The values of 0 and
+   0xFFFFFF are reserved.<a href="#section-5.3-6" class="pilcrow">¶</a></p>
+<p id="section-5.3-7">Flags (8 bits):<a href="#section-5.3-7" class="pilcrow">¶</a></p>
+<p id="section-5.3-8">O(Operational - 3 bits): On PCTunnelRpt messages, the O Field
+   represents the operational status of the tunnel.<a href="#section-5.3-8" class="pilcrow">¶</a></p>
+<p id="section-5.3-9">The following values are defined:<a href="#section-5.3-9" class="pilcrow">¶</a></p>
+<p id="section-5.3-10">0 - DOWN: The tunnel can't carry the traffic.<a href="#section-5.3-10" class="pilcrow">¶</a></p>
+<p id="section-5.3-11">1 - UP: The tunnel can carry the traffic.<a href="#section-5.3-11" class="pilcrow">¶</a></p>
+<p id="section-5.3-12">2-7 - Reserved: these values are reserved for future use.<a href="#section-5.3-12" class="pilcrow">¶</a></p>
+<p id="section-5.3-13">Unassigned bits are considered reserved.  They <span class="bcp14">MUST</span> be set to 0 on
+   transmission and <span class="bcp14">MUST</span> be ignored on receipt.<a href="#section-5.3-13" class="pilcrow">¶</a></p>
+<p id="section-5.3-14">TLVs that may be included in the TUNNEL Object are described in the
+   following sections.<a href="#section-5.3-14" class="pilcrow">¶</a></p>
+<div id="tunnel-identifier-tlv">
+<section id="section-5.3.1">
+          <h4 id="name-tunnel-identifier-tlv">
+<a href="#section-5.3.1" class="section-number selfRef">5.3.1. </a><a href="#name-tunnel-identifier-tlv" class="section-name selfRef">Tunnel Identifier TLV</a>
+          </h4>
+<p id="section-5.3.1-1">The Tunnel Identifier TLV <span class="bcp14">MUST</span> be included in the TUNNEL object in
+   PCTunnelInitiate, PCTunnelRpt and PCTunnelUpd messages for PCE-
+   initiated IP Tunnels.  If the TLV is missing, the PCE will generate
+   an error with error-type 6 (mandatory object missing) and error-value
+   which means Tunnel Identifier TLV missing and close the session.
+   There are two Tunnel Identifier TLVs, one for IPv4 and one for IPv6.<a href="#section-5.3.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.3.1-2">The format of the IPV4-TUNNEL-Identifier TLV is shown in the
+   following figure:<a href="#section-5.3.1-2" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.3.1-3">
+<pre>
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |           Type=[TBD]          |           Length=12           |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                   IPv4 Tunnel Source Address                  |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                   IPv4 Tunnel Destination Address             |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |           Tunnel Type         |           Tunnel ID           |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</pre><a href="#section-5.3.1-3" class="pilcrow">¶</a>
+</div>
+<p id="section-5.3.1-4">The type of the TLV is to be assigned by IANA and it has a fixed
+   length of 12 octets.  The value contains the following fields:<a href="#section-5.3.1-4" class="pilcrow">¶</a></p>
+<p id="section-5.3.1-5">IPv4 Tunnel Source Address: contains the source IPv4 address of the
+   ingress node of the tunnel.<a href="#section-5.3.1-5" class="pilcrow">¶</a></p>
+<p id="section-5.3.1-6">IPv4 Tunnel Destination Address: contains the destination IPv4
+   address of the egress node of the tunnel.<a href="#section-5.3.1-6" class="pilcrow">¶</a></p>
+<p id="section-5.3.1-7">Tunnel Type: contains the type of tunnel (see <a href="#tunnel-type" class="auto internal xref">Table 1</a>).<a href="#section-5.3.1-7" class="pilcrow">¶</a></p>
+<p id="section-5.3.1-8">Tunnel ID: Tunnel ID remains constant over the life time of a tunnel.
+   A PCC creates a unique Tunnel ID for each tunnel.  Each tunnel type
+   has individual identifier space.  The Tunnel ID is allocated on id
+   space of the tunnel type and is unique in the same id space.<a href="#section-5.3.1-8" class="pilcrow">¶</a></p>
+<p id="section-5.3.1-9">The PCC will advertise the same Tunnel ID on all PCEP sessions.  The
+   mapping of the Tunnel Name to Tunnel ID is communicated to the PCE by
+   sending a PCTunnelRpt message containing the TUNNEL-NAME TLV.  The
+   values of 0 and 0xFFFF are reserved.<a href="#section-5.3.1-9" class="pilcrow">¶</a></p>
+<p id="section-5.3.1-10">The format of the IPV6-TUNNEL-Identifier TLV is shown in following
+   figure:<a href="#section-5.3.1-10" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.3.1-11">
+<pre>
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |           Type=[TBD]          |           Length=36           |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                                                               |
+   +                                                               +
+   |                  IPv6 tunnel source address                   |
+   +                          (16 octets)                          +
+   |                                                               |
+   +                                                               +
+   |                                                               |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                                                               |
+   +                                                               +
+   |                  IPv6 tunnel destination address              |
+   +                          (16 octets)                          +
+   |                                                               |
+   +                                                               +
+   |                                                               |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |             Tunnel Type       |           Tunnel ID           |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</pre><a href="#section-5.3.1-11" class="pilcrow">¶</a>
+</div>
+<p id="section-5.3.1-12">The type of the TLV is to be assigned by IANA and it has a fixed
+   length of 36 octets.  The value contains the following fields:<a href="#section-5.3.1-12" class="pilcrow">¶</a></p>
+<p id="section-5.3.1-13">IPv6 Tunnel Source Address: contains the source IPv6 address of the
+   ingress node of the tunnel.<a href="#section-5.3.1-13" class="pilcrow">¶</a></p>
+<p id="section-5.3.1-14">IPv6 Tunnel Destination Address: contains the destination IPv6
+   address of the egress node of the tunnel.<a href="#section-5.3.1-14" class="pilcrow">¶</a></p>
+<p id="section-5.3.1-15">Tunnel Type: contains the type of tunnel (see <a href="#tunnel-type" class="auto internal xref">Table 1</a>).<a href="#section-5.3.1-15" class="pilcrow">¶</a></p>
+<p id="section-5.3.1-16">Tunnel ID: Tunnel ID remains constant over the life time of a tunnel.
+   A PCC creates a unique Tunnel ID for each TUNNEL.  Each tunnel type
+   has individual identifier space.  The tunnel ID is allocated on id
+   space of the tunnel type and is unique in the same id space.<a href="#section-5.3.1-16" class="pilcrow">¶</a></p>
+<p id="section-5.3.1-17">The PCC will advertise the same Tunnel ID on all PCEP sessions.  The
+   mapping of the Tunnel Name to Tunnel ID is communicated to the PCE by
+   sending a PCTunnelRpt message containing the TUNNEL-NAME TLV.  The
+   values of 0 and 0xFFFF are reserved.<a href="#section-5.3.1-17" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="tunnel-name-tlv">
+<section id="section-5.3.2">
+          <h4 id="name-tunnel-name-tlv">
+<a href="#section-5.3.2" class="section-number selfRef">5.3.2. </a><a href="#name-tunnel-name-tlv" class="section-name selfRef">Tunnel Name TLV</a>
+          </h4>
+<p id="section-5.3.2-1">The Tunnel Name TLV <span class="bcp14">MUST</span> be included in the TUNNEL object in
+   PCTunnelInitiate messages for PCE-initiated IP Tunnels.  If the TLV
+   is missing, the PCE will generate an error with error-type 6
+   (mandatory object missing) and error-value which means Tunnel Name
+   TLV missing and close the session.<a href="#section-5.3.2-1" class="pilcrow">¶</a></p>
+<p id="section-5.3.2-2">Each tunnel <span class="bcp14">MUST</span> have a tunnel name that is unique in the PCC.  This
+   tunnel name <span class="bcp14">MUST</span> remain constant throughout a tunnel's lifetime.<a href="#section-5.3.2-2" class="pilcrow">¶</a></p>
+<p id="section-5.3.2-3">The TUNNEL-NAME TLV <span class="bcp14">MUST</span> be included in the PCTunnelRpt message when
+   a tunnel is first reported to a PCE in response to the
+   PCTunnelInitiate message to create the tunnel.  The tunnel name <span class="bcp14">MAY</span>
+   be included in subsequent PCTunnelRpt messages for the tunnel.<a href="#section-5.3.2-3" class="pilcrow">¶</a></p>
+<p id="section-5.3.2-4">The format of the TUNNEL-NAME TLV is shown in the following figure:<a href="#section-5.3.2-4" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.3.2-5">
+<pre>
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |           Type=[TBD]          |       Length (variable)       |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                                                               |
+   //                      Tunnel Name                            //
+   |                                                               |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</pre><a href="#section-5.3.2-5" class="pilcrow">¶</a>
+</div>
+<p id="section-5.3.2-6">The type of the TLV is to be assigned by IANA and it has a variable
+   length, which <span class="bcp14">MUST</span> be greater than 0.<a href="#section-5.3.2-6" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="tunnel-parameter-tlv">
+<section id="section-5.3.3">
+          <h4 id="name-tunnel-parameter-tlv">
+<a href="#section-5.3.3" class="section-number selfRef">5.3.3. </a><a href="#name-tunnel-parameter-tlv" class="section-name selfRef">Tunnel Parameter TLV</a>
+          </h4>
+<p id="section-5.3.3-1">The Tunnel Parameter TLV and/or Tunnel Attribute TLV(see details in
+   following section) <span class="bcp14">MUST</span> be included in the TUNNEL object in
+   PCTunnelUpd messages for PCE-initiated IP Tunnels.  If both of the
+   TLVs are missing, the PCE will generate an error with error-type 6
+   (mandatory object missing) and error-value which means Tunnel
+   Parameter TLV and Tunnel Attribute TLV missing and close the session.<a href="#section-5.3.3-1" class="pilcrow">¶</a></p>
+<p id="section-5.3.3-2">The Tunnel Parameter TLV <span class="bcp14">MAY</span> be included in the TUNNEL object in
+   PCTunnelInitiate and PCTunnelRpt messages for PCE-initiated IP
+   Tunnels.<a href="#section-5.3.3-2" class="pilcrow">¶</a></p>
+<p id="section-5.3.3-3">Tunnel Parameter TLV specifies information needed to construct the
+   encapsulation header when sending packets through that tunnel.<a href="#section-5.3.3-3" class="pilcrow">¶</a></p>
+<p id="section-5.3.3-4">The tunnel with different type has different encapsulation mode and
+   each tunnel with same type <span class="bcp14">MAY</span> has different encapsulation
+   parameters.  When PCE initiate setup of the tunnel PCE can specify
+   the encapsulation parameter of the tunnel and PCC will setup the
+   tunnel and encapsulate the packet according to the parameters.<a href="#section-5.3.3-4" class="pilcrow">¶</a></p>
+<p id="section-5.3.3-5">After the tunnel has been triggered to instantiate PCE can send
+   PCTunnelUpd message to modify the encapsulation parameter.<a href="#section-5.3.3-5" class="pilcrow">¶</a></p>
+<p id="section-5.3.3-6">The format of the TUNNEL-PARAMETER TLV is shown in following figure:<a href="#section-5.3.3-6" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.3.3-7">
+<pre>
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |           Type=[TBD]          |           Length=variable     |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |             Tunnel Type       |           Reserved            |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                                                               |
+   +                                                               +
+   //                   Tunnel Encapsulation Parameter            //
+   +                          (variable)                           +
+   |                                                               |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</pre><a href="#section-5.3.3-7" class="pilcrow">¶</a>
+</div>
+<p id="section-5.3.3-8">The type of the TLV is to be assigned by IANA and it has a variable
+   length, which <span class="bcp14">MUST</span> be greater than 0.  The minimum value of length is
+   4 without any parameter.  The value contains the following fields:<a href="#section-5.3.3-8" class="pilcrow">¶</a></p>
+<p id="section-5.3.3-9">Tunnel Type: contains the type of tunnel (see <a href="#tunnel-type" class="auto internal xref">Table 1</a>).<a href="#section-5.3.3-9" class="pilcrow">¶</a></p>
+<div id="gre">
+<section id="section-5.3.3.1">
+            <h5 id="name-gre">
+<a href="#section-5.3.3.1" class="section-number selfRef">5.3.3.1. </a><a href="#name-gre" class="section-name selfRef">GRE</a>
+            </h5>
+<p id="section-5.3.3.1-1">When the tunnel type of the TLV is GRE, the following is the
+   structure of the value field of Tunnel Encapsulation Parameter:<a href="#section-5.3.3.1-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.3.3.1-2">
+<pre>
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                      GRE Key (4 octets)                       |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</pre><a href="#section-5.3.3.1-2" class="pilcrow">¶</a>
+</div>
+<ul class="normal">
+<li class="normal" id="section-5.3.3.1-3.1">GRE Key: 4-octet field <span>[<a href="#RFC2890" class="cite xref">RFC2890</a>]</span>.  The actual method by which the
+   key is obtained by PCE is beyond the scope of this document.  The key
+   is inserted into the GRE encapsulation header of the payload packets
+   sent by ingress router to the egress router.  It is intended to be
+   used for identifying extra context information about the received
+   payload.<a href="#section-5.3.3.1-3.1" class="pilcrow">¶</a>
+</li>
+            </ul>
+<p id="section-5.3.3.1-4">Note that the key is optional.  Unless a key value is being used, the
+   GRE encapsulation <span class="bcp14">MUST NOT</span> be present.  If GRE tunnel didn't use the
+   GRE key the PCTunnelInitiate message needn't carry the TUNNEL-
+   PARAMETER TLV.  If GRE tunnel firstly use the GRE key the
+   PCTunnelInitiate message need carry the TUNNEL-PARAMETER TLV.  Then
+   if the GRE tunnel quit using the GRE key the PCTunnelUpd message can
+   carry the TUNNEL-PARAMETER TLV without GRE key to delete the
+   parameter previously set.<a href="#section-5.3.3.1-4" class="pilcrow">¶</a></p>
+<p id="section-5.3.3.1-5">MPLS in GRE has the same encapsulation with GRE.<a href="#section-5.3.3.1-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="vxlan">
+<section id="section-5.3.3.2">
+            <h5 id="name-vxlan">
+<a href="#section-5.3.3.2" class="section-number selfRef">5.3.3.2. </a><a href="#name-vxlan" class="section-name selfRef">VXLAN</a>
+            </h5>
+<p id="section-5.3.3.2-1">When the tunnel type of the TLV is VXLAN, the following is the
+   structure of the value field of Tunnel Encapsulation Parameter:<a href="#section-5.3.3.2-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.3.3.2-2">
+<pre>
+   0                   1                   2                   3
+   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |V|M|R|R|R|R|R|R|          VN-ID (3 Octets)                   |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                 MAC Address (4 Octets)                      |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |  MAC Address (2 Octets)     |   Reserved                    |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</pre><a href="#section-5.3.3.2-2" class="pilcrow">¶</a>
+</div>
+<p id="section-5.3.3.2-3">The definition of the fields refer to <span>[<a href="#RFC9012" class="cite xref">RFC9012</a>]</span>.<a href="#section-5.3.3.2-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="nvgre">
+<section id="section-5.3.3.3">
+            <h5 id="name-nvgre">
+<a href="#section-5.3.3.3" class="section-number selfRef">5.3.3.3. </a><a href="#name-nvgre" class="section-name selfRef">NVGRE</a>
+            </h5>
+<p id="section-5.3.3.3-1">When the tunnel type of the TLV is NVGRE, the following is the
+   structure of the value field of Tunnel Encapsulation Parameter:<a href="#section-5.3.3.3-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.3.3.3-2">
+<pre>
+   0                   1                   2                   3
+   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |V|M|R|R|R|R|R|R|          VN-ID (3 Octets)                   |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                 MAC Address (4 Octets)                      |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |  MAC Address (2 Octets)     |   Reserved                    |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</pre><a href="#section-5.3.3.3-2" class="pilcrow">¶</a>
+</div>
+<p id="section-5.3.3.3-3">The definition of the fields refer to <span>[<a href="#RFC9012" class="cite xref">RFC9012</a>]</span>.<a href="#section-5.3.3.3-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="mpls-in-udp">
+<section id="section-5.3.3.4">
+            <h5 id="name-mpls-in-udp">
+<a href="#section-5.3.3.4" class="section-number selfRef">5.3.3.4. </a><a href="#name-mpls-in-udp" class="section-name selfRef">MPLS-in-UDP</a>
+            </h5>
+<p id="section-5.3.3.4-1">When the tunnel type of the TLV is MPLS-in-UDP, the following is the
+   structure of the value field of Tunnel Encapsulation Parameter:<a href="#section-5.3.3.4-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.3.3.4-2">
+<pre>
+   0                   1                   2                   3
+   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |  Source Port (2 Octets)      |  Destination Port (2 Octets) |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</pre><a href="#section-5.3.3.4-2" class="pilcrow">¶</a>
+</div>
+<p id="section-5.3.3.4-3">Source Port: UDP source port.<a href="#section-5.3.3.4-3" class="pilcrow">¶</a></p>
+<p id="section-5.3.3.4-4">Destination Port: UDP destination port.<a href="#section-5.3.3.4-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="tunnel-attribute-tlv">
+<section id="section-5.3.4">
+          <h4 id="name-tunnel-attribute-tlv">
+<a href="#section-5.3.4" class="section-number selfRef">5.3.4. </a><a href="#name-tunnel-attribute-tlv" class="section-name selfRef">Tunnel Attribute TLV</a>
+          </h4>
+<p id="section-5.3.4-1">The Tunnel Attribute TLV <span class="bcp14">MAY</span> be included in the TUNNEL object in
+   PCTunnelInitiate, PCTunnelUpd, PCTunnelRpt messages for PCE-initiated
+   IP Tunnels.<a href="#section-5.3.4-1" class="pilcrow">¶</a></p>
+<p id="section-5.3.4-2">Tunnel Attribute TLV specifies some of the information of the tunnel
+   such as metric or TE metric which are carried in sub-TLVs.<a href="#section-5.3.4-2" class="pilcrow">¶</a></p>
+<p id="section-5.3.4-3">The format of the TUNNEL-ATTRIBUTE TLV is shown in following figure:<a href="#section-5.3.4-3" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.3.4-4">
+<pre>
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |           Type=[TBD]          |           Length              |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   //                       sub-TLVs                              //
+   |                                                               |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</pre><a href="#section-5.3.4-4" class="pilcrow">¶</a>
+</div>
+<p id="section-5.3.4-5">The type of the TLV is to be assigned by IANA and it has a variable
+   length.  The minimum value of length is 0 without any parameter.  The
+   value contains the following fields:<a href="#section-5.3.4-5" class="pilcrow">¶</a></p>
+<p id="section-5.3.4-6">sub-TLVs: Each sub-TLV has the Type (two octets), Length (two octets),
+   Value.  The length is the length of the value of the sub-TLV.
+   Unknown sub-TLVs are to be ignored and skipped upon receipt.<a href="#section-5.3.4-6" class="pilcrow">¶</a></p>
+<p id="section-5.3.4-7">This document defines the following sub-TLVs.<a href="#section-5.3.4-7" class="pilcrow">¶</a></p>
+<div id="metric-sub-tlv">
+<section id="section-5.3.4.1">
+            <h5 id="name-metric-sub-tlv">
+<a href="#section-5.3.4.1" class="section-number selfRef">5.3.4.1. </a><a href="#name-metric-sub-tlv" class="section-name selfRef">Metric Sub-TLV</a>
+            </h5>
+<p id="section-5.3.4.1-1">The following is the structure of the sub-TLV of metric:<a href="#section-5.3.4.1-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.3.4.1-2">
+<pre>
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |           Type=[TBD]          |           Length              |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                      Metric Value                             |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</pre><a href="#section-5.3.4.1-2" class="pilcrow">¶</a>
+</div>
+<p id="section-5.3.4.1-3">The type of the sub-TLV is to be assigned by IANA and it has a fixed
+   length of 4 octets.<a href="#section-5.3.4.1-3" class="pilcrow">¶</a></p>
+<p id="section-5.3.4.1-4">The value comprises a single field - Metric Value (32 bits): value of
+   metric.<a href="#section-5.3.4.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="te-metric-sub-tlv">
+<section id="section-5.3.4.2">
+            <h5 id="name-te-metric-sub-tlv">
+<a href="#section-5.3.4.2" class="section-number selfRef">5.3.4.2. </a><a href="#name-te-metric-sub-tlv" class="section-name selfRef">TE Metric Sub-TLV</a>
+            </h5>
+<p id="section-5.3.4.2-1">The following is the structure of the sub-TLV of traffic engineering
+   metric:<a href="#section-5.3.4.2-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.3.4.2-2">
+<pre>
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |           Type=[TBD]          |           Length              |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                     TE Metric Value                           |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</pre><a href="#section-5.3.4.2-2" class="pilcrow">¶</a>
+</div>
+<p id="section-5.3.4.2-3">The type of the sub-TLV is to be assigned by IANA and it has a fixed
+   length of 4 octets.<a href="#section-5.3.4.2-3" class="pilcrow">¶</a></p>
+<p id="section-5.3.4.2-4">The value comprises a single field - TE Metric Value (32 bits): value
+   of traffic engineering metric.<a href="#section-5.3.4.2-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+</section>
+</div>
+</section>
+</div>
+<div id="security-considerations">
+<section id="section-6">
+      <h2 id="name-security-considerations">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+      </h2>
+<p id="section-6-1">TBD.<a href="#section-6-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="iana-considerations">
+<section id="section-7">
+      <h2 id="name-iana-considerations">
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+      </h2>
+<p id="section-7-1">TBD.<a href="#section-7-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<section id="section-8">
+      <h2 id="name-references">
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-references" class="section-name selfRef">References</a>
+      </h2>
+<section id="section-8.1">
+        <h3 id="name-normative-references">
+<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+        </h3>
+<dl class="references">
+<dt id="I-D.li-spring-tunnel-segment">[I-D.li-spring-tunnel-segment]</dt>
+        <dd>
+<span class="refAuthor">Li, Z.</span>, <span class="refAuthor">Li, C.</span>, and <span class="refAuthor">N. Wu</span>, <span class="refTitle">"Tunnel Segment in Segment Routing"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-li-spring-tunnel-segment-02</span>, <time datetime="2021-04-14" class="refDate">14 April 2021</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-li-spring-tunnel-segment-02">https://datatracker.ietf.org/doc/html/draft-li-spring-tunnel-segment-02</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC2119">[RFC2119]</dt>
+        <dd>
+<span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2119">https://www.rfc-editor.org/info/rfc2119</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC2890">[RFC2890]</dt>
+        <dd>
+<span class="refAuthor">Dommety, G.</span>, <span class="refTitle">"Key and Sequence Number Extensions to GRE"</span>, <span class="seriesInfo">RFC 2890</span>, <span class="seriesInfo">DOI 10.17487/RFC2890</span>, <time datetime="2000-09" class="refDate">September 2000</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2890">https://www.rfc-editor.org/info/rfc2890</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC5440">[RFC5440]</dt>
+        <dd>
+<span class="refAuthor">Vasseur, JP., Ed.</span> and <span class="refAuthor">JL. Le Roux, Ed.</span>, <span class="refTitle">"Path Computation Element (PCE) Communication Protocol (PCEP)"</span>, <span class="seriesInfo">RFC 5440</span>, <span class="seriesInfo">DOI 10.17487/RFC5440</span>, <time datetime="2009-03" class="refDate">March 2009</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc5440">https://www.rfc-editor.org/info/rfc5440</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC5511">[RFC5511]</dt>
+        <dd>
+<span class="refAuthor">Farrel, A.</span>, <span class="refTitle">"Routing Backus-Naur Form (RBNF): A Syntax Used to Form Encoding Rules in Various Routing Protocol Specifications"</span>, <span class="seriesInfo">RFC 5511</span>, <span class="seriesInfo">DOI 10.17487/RFC5511</span>, <time datetime="2009-04" class="refDate">April 2009</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc5511">https://www.rfc-editor.org/info/rfc5511</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8174">[RFC8174]</dt>
+        <dd>
+<span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8174">https://www.rfc-editor.org/info/rfc8174</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9012">[RFC9012]</dt>
+      <dd>
+<span class="refAuthor">Patel, K.</span>, <span class="refAuthor">Van de Velde, G.</span>, <span class="refAuthor">Sangli, S.</span>, and <span class="refAuthor">J. Scudder</span>, <span class="refTitle">"The BGP Tunnel Encapsulation Attribute"</span>, <span class="seriesInfo">RFC 9012</span>, <span class="seriesInfo">DOI 10.17487/RFC9012</span>, <time datetime="2021-04" class="refDate">April 2021</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9012">https://www.rfc-editor.org/info/rfc9012</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+<section id="section-8.2">
+        <h3 id="name-informative-references">
+<a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+        </h3>
+<dl class="references">
+<dt id="RFC8231">[RFC8231]</dt>
+        <dd>
+<span class="refAuthor">Crabbe, E.</span>, <span class="refAuthor">Minei, I.</span>, <span class="refAuthor">Medved, J.</span>, and <span class="refAuthor">R. Varga</span>, <span class="refTitle">"Path Computation Element Communication Protocol (PCEP) Extensions for Stateful PCE"</span>, <span class="seriesInfo">RFC 8231</span>, <span class="seriesInfo">DOI 10.17487/RFC8231</span>, <time datetime="2017-09" class="refDate">September 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8231">https://www.rfc-editor.org/info/rfc8231</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8281">[RFC8281]</dt>
+        <dd>
+<span class="refAuthor">Crabbe, E.</span>, <span class="refAuthor">Minei, I.</span>, <span class="refAuthor">Sivabalan, S.</span>, and <span class="refAuthor">R. Varga</span>, <span class="refTitle">"Path Computation Element Communication Protocol (PCEP) Extensions for PCE-Initiated LSP Setup in a Stateful PCE Model"</span>, <span class="seriesInfo">RFC 8281</span>, <span class="seriesInfo">DOI 10.17487/RFC8281</span>, <time datetime="2017-12" class="refDate">December 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8281">https://www.rfc-editor.org/info/rfc8281</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8664">[RFC8664]</dt>
+      <dd>
+<span class="refAuthor">Sivabalan, S.</span>, <span class="refAuthor">Filsfils, C.</span>, <span class="refAuthor">Tantsura, J.</span>, <span class="refAuthor">Henderickx, W.</span>, and <span class="refAuthor">J. Hardwick</span>, <span class="refTitle">"Path Computation Element Communication Protocol (PCEP) Extensions for Segment Routing"</span>, <span class="seriesInfo">RFC 8664</span>, <span class="seriesInfo">DOI 10.17487/RFC8664</span>, <time datetime="2019-12" class="refDate">December 2019</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8664">https://www.rfc-editor.org/info/rfc8664</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+</section>
+<div id="authors-addresses">
+<section id="appendix-A">
+      <h2 id="name-authors-addresses">
+<a href="#name-authors-addresses" class="section-name selfRef">Authors' Addresses</a>
+      </h2>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Xia Chen</span></div>
+<div dir="auto" class="left"><span class="org">Huawei Technologies</span></div>
+<div dir="auto" class="left"><span class="country-name">China</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:jescia.chenxia@huawei.com" class="email">jescia.chenxia@huawei.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Hang Shi (<span class="role">editor</span>)</span></div>
+<div dir="auto" class="left"><span class="org">Huawei Technologies</span></div>
+<div dir="auto" class="left"><span class="country-name">China</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:shihang9@huawei.com" class="email">shihang9@huawei.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Zhenbin Li</span></div>
+<div dir="auto" class="left"><span class="org">Huawei Technologies</span></div>
+<div dir="auto" class="left"><span class="country-name">China</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:lizhenbin@huawei.com" class="email">lizhenbin@huawei.com</a>
+</div>
+</address>
+</section>
+</div>
+<script>const toc = document.getElementById("toc");
+toc.querySelector("h2").addEventListener("click", e => {
+  toc.classList.toggle("active");
+});
+toc.querySelector("nav").addEventListener("click", e => {
+  toc.classList.remove("active");
+});
+</script>
+</body>
+</html>
