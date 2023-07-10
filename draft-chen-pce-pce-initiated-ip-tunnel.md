@@ -6,6 +6,7 @@ date:
 category: std
 submissionType: IETF
 
+ipr: trust200902
 area: Routing
 workgroup: "Path Computation Element"
 keyword: Internet-Draft
