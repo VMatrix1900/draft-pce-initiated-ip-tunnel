@@ -6,8 +6,7 @@ date:
 category: std
 submissionType: IETF
 
-ipr: trust200902
-area: "Routing"
+area: Routing
 workgroup: "Path Computation Element"
 keyword: Internet-Draft
 
@@ -41,7 +40,7 @@ normative:
     RFC2890:
     RFC5440:
     RFC5511:
-    RFC5512:
+    RFC9012:
     RFC9012:
 
 informative:
@@ -59,23 +58,11 @@ This document specifies a set of extensions to PCEP to support PCE-initiated IP 
 
 # Introduction
 
-{{I-D.li-spring-tunnel-segment}} introduces a new type of segment,
-   Tunnel Segment, for the segment routing.  Tunnel segment can be used
-   to reduce SID stack depth of SR path, span the non-SR domain or
-   provide differentiated services.  The tunnel segment can be allocated
-   for MPLS RSVP-TE tunnel, SR-TE tunnel or IP Tunnel.
+{{I-D.li-spring-tunnel-segment}} introduces a new type of segment, Tunnel Segment, for the segment routing.  Tunnel segment can be used to reduce SID stack depth of SR path, span the non-SR domain or provide differentiated services. The tunnel segment can be allocated for MPLS RSVP-TE tunnel, SR-TE tunnel or IP tunnel. IP tunnel is also useful in SD-WAN scenario.
 
-{{I-D.li-spring-tunnel-segment}} introduces two ways to set up the
-   tunnel which is used as tunnel segment: one is to configure tunnel on
-   the device, the other is PCE-initiated tunnel.
+{{I-D.li-spring-tunnel-segment}} introduces two ways to set up the tunnel which is used as tunnel segment: one is to configure tunnel on the device, the other is PCE-initiated tunnel.
 
-{{RFC8231}}, {{RFC8281}} and
-   {{RFC8664}} has defined how to set up the PCE
-   initiated RSVP-TE LSP and SR-TE LSP.  This document specifies a set
-   of extensions to PCEP to support PCE-initiated IP Tunnel.  The
-   extensions include the setup, maintenance and teardown of PCE-
-   initiated IP Tunnels, without the need for local configuration on the
-   PCC.
+{{RFC8231}}, {{RFC8281}} and {{RFC8664}} has defined how to set up the PCE initiated RSVP-TE LSP and SR-TE LSP.  This document specifies a set of extensions to PCEP to support PCE-initiated IP Tunnel. The extensions include the setup, maintenance and teardown of PCE-initiated IP Tunnels, without the need for local configuration on the PCC.
 
 # Terminology
 
@@ -101,7 +88,7 @@ This document specifies a set of extensions to PCEP to support PCE-initiated IP 
 
 ## Requirements Language
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in BCP 14 {{!RFC2119}} when, and only when, they appear in all capitals, as shown here.
+{::boilerplate bcp14-tagged}
 
 # Procedures for PCE-initiated IP Tunnel
 
@@ -449,7 +436,7 @@ Where:
    Each bit indicates one kind of tunnel.  Each bit from right to left
    successively represents the value of tunnel type which is 0 to 31.
    The value of tunnel types refer to the registry for "BGP Tunnel
-   Encapsulation Attribute Tunnel Types" {{RFC5512}} assigned by IANA.
+   Encapsulation Attribute Tunnel Types" {{RFC9012}} assigned by IANA.
    This document only use the IP tunnel type.
 
    The assignments used by this document are as follows:
