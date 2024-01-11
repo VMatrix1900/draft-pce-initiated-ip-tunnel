@@ -99,8 +99,8 @@ A PCC or PCE indicates its ability to support PCE Initiated dynamic
    tunnel during the PCEP Initialization Phase via "PCE Initiated Tunnel
    Capability" TLV (see details in {{tunnel-cap}}).
 
-   In this document the procedure is only about PCE Initiated dynamic IP
-   Tunnel.  The decision when to instantiate or delete a PCE-initiated
+   In this document, the procedure is only about PCE Initiated dynamic IP
+   Tunnel.  The decision of when to instantiate or delete a PCE-initiated
    IP Tunnel is out of the scope of this document.
 
    This section introduces the procedure to support PCE provisioned IP
