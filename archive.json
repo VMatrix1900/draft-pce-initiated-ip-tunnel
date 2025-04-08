@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-04-06T01:36:31.776868+00:00",
+  "timestamp": "2025-04-08T01:24:35.183976+00:00",
   "repo": "VMatrix1900/draft-pce-initiated-ip-tunnel",
   "labels": [
     {
@@ -83,6 +83,34 @@
       "mergeCommit": {
         "oid": "6306400d3f42450679ad6bbb10ebce7f6080fb6e"
       },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 2,
+      "id": "PR_kwDOJbBBvs6RjfAs",
+      "title": "upstream merge template repository",
+      "url": "https://github.com/VMatrix1900/draft-pce-initiated-ip-tunnel/pull/2",
+      "state": "OPEN",
+      "author": "VMatrix1900",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [
+        "template_sync"
+      ],
+      "body": "Merge https://github.com/martinthomson/internet-draft-template 9bbaf3f",
+      "createdAt": "2025-04-07T01:06:52Z",
+      "updatedAt": "2025-04-07T01:06:52Z",
+      "baseRepository": "VMatrix1900/draft-pce-initiated-ip-tunnel",
+      "baseRefName": "main",
+      "baseRefOid": "6306400d3f42450679ad6bbb10ebce7f6080fb6e",
+      "headRepository": "VMatrix1900/draft-pce-initiated-ip-tunnel",
+      "headRefName": "chore/template_sync_9bbaf3f",
+      "headRefOid": "000cf31f23b181f84298bddf58cd6ab196146b42",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
       "comments": [],
       "reviews": []
     }
