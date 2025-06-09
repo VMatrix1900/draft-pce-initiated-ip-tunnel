@@ -5,8 +5,8 @@
 Path Computation Element                                         X. Chen
 Internet-Draft                                               H. Shi, Ed.
 Intended status: Standards Track                                   Z. Li
-Expires: 9 October 2025                              Huawei Technologies
-                                                            7 April 2025
+Expires: 11 December 2025                            Huawei Technologies
+                                                             9 June 2025
 
 
                         PCE-initiated IP Tunnel
@@ -46,7 +46,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 9 October 2025.
+   This Internet-Draft will expire on 11 December 2025.
 
 Copyright Notice
 
