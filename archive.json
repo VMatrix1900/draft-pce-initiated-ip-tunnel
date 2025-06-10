@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-06-08T01:47:44.735075+00:00",
+  "timestamp": "2025-06-10T01:41:52.757341+00:00",
   "repo": "VMatrix1900/draft-pce-initiated-ip-tunnel",
   "labels": [
     {
@@ -127,7 +127,7 @@
       "id": "PR_kwDOJbBBvs6YhaIH",
       "title": "upstream merge template repository",
       "url": "https://github.com/VMatrix1900/draft-pce-initiated-ip-tunnel/pull/3",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "VMatrix1900",
       "authorAssociation": "OWNER",
       "assignees": [],
@@ -136,13 +136,49 @@
       ],
       "body": "Merge https://github.com/martinthomson/internet-draft-template 25d2fb2",
       "createdAt": "2025-06-02T01:12:57Z",
-      "updatedAt": "2025-06-02T01:12:58Z",
+      "updatedAt": "2025-06-09T01:14:04Z",
       "baseRepository": "VMatrix1900/draft-pce-initiated-ip-tunnel",
       "baseRefName": "main",
       "baseRefOid": "6306400d3f42450679ad6bbb10ebce7f6080fb6e",
       "headRepository": "VMatrix1900/draft-pce-initiated-ip-tunnel",
       "headRefName": "chore/template_sync_25d2fb2",
       "headRefOid": "14fa0f761499f1cd92f63a17aca41297ac8898a9",
+      "closedAt": "2025-06-09T01:14:03Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "VMatrix1900",
+          "authorAssociation": "OWNER",
+          "body": "[actions-template-sync] :construction_worker: automatically closed because there is a new open PR",
+          "createdAt": "2025-06-09T01:14:02Z",
+          "updatedAt": "2025-06-09T01:14:02Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 4,
+      "id": "PR_kwDOJbBBvs6Zm6lB",
+      "title": "upstream merge template repository",
+      "url": "https://github.com/VMatrix1900/draft-pce-initiated-ip-tunnel/pull/4",
+      "state": "OPEN",
+      "author": "VMatrix1900",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [
+        "template_sync"
+      ],
+      "body": "Merge https://github.com/martinthomson/internet-draft-template 666634c",
+      "createdAt": "2025-06-09T01:14:04Z",
+      "updatedAt": "2025-06-09T01:14:05Z",
+      "baseRepository": "VMatrix1900/draft-pce-initiated-ip-tunnel",
+      "baseRefName": "main",
+      "baseRefOid": "6306400d3f42450679ad6bbb10ebce7f6080fb6e",
+      "headRepository": "VMatrix1900/draft-pce-initiated-ip-tunnel",
+      "headRefName": "chore/template_sync_666634c",
+      "headRefOid": "93150b8737f198c673f2a31ffa31e03eb6495037",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
