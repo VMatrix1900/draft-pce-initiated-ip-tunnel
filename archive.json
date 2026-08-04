@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-08-02T02:47:02.582483+00:00",
+  "timestamp": "2026-08-04T02:31:31.959542+00:00",
   "repo": "VMatrix1900/draft-pce-initiated-ip-tunnel",
   "labels": [
     {
@@ -379,7 +379,7 @@
       "id": "PR_kwDOJbBBvs7R2LHG",
       "title": "upstream merge template repository",
       "url": "https://github.com/VMatrix1900/draft-pce-initiated-ip-tunnel/pull/10",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "VMatrix1900",
       "authorAssociation": "OWNER",
       "assignees": [],
@@ -388,17 +388,53 @@
       ],
       "body": "Merge https://github.com/martinthomson/internet-draft-template 92e42e9",
       "createdAt": "2026-04-13T02:06:26Z",
-      "updatedAt": "2026-04-13T02:06:26Z",
+      "updatedAt": "2026-08-03T08:46:19Z",
       "baseRepository": "VMatrix1900/draft-pce-initiated-ip-tunnel",
       "baseRefName": "main",
       "baseRefOid": "6306400d3f42450679ad6bbb10ebce7f6080fb6e",
       "headRepository": "VMatrix1900/draft-pce-initiated-ip-tunnel",
       "headRefName": "chore/template_sync_92e42e9",
       "headRefOid": "199c08994943b69e2e5fd1e9acd304f91937b173",
-      "closedAt": null,
+      "closedAt": "2026-08-03T08:46:17Z",
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
+      "comments": [
+        {
+          "author": "github-actions",
+          "authorAssociation": "NONE",
+          "body": "[actions-template-sync] :construction_worker: automatically closed because there is a new open PR",
+          "createdAt": "2026-08-03T08:46:17Z",
+          "updatedAt": "2026-08-03T08:46:17Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 11,
+      "id": "PR_kwDOJbBBvs756AwH",
+      "title": "Remove template sync workflow",
+      "url": "https://github.com/VMatrix1900/draft-pce-initiated-ip-tunnel/pull/11",
+      "state": "MERGED",
+      "author": "VMatrix1900",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "## What changed\n\n- Remove the scheduled and manually dispatched template synchronization workflow.\n\n## Why\n\nThe workflow depends on a separately managed token with permission to modify GitHub workflow files. Automatic upstream template synchronization is not required for this repository, so removing the workflow avoids the recurring authentication and permission failures.\n\n## Impact\n\nThe draft repository remains usable. Future updates from `martinthomson/internet-draft-template` must be applied manually.\n\n## Validation\n\n- The PR diff contains only the deletion of `.github/workflows/template-sync.yml`.\n- `git diff --check` passed.\n",
+      "createdAt": "2026-08-03T08:45:04Z",
+      "updatedAt": "2026-08-03T09:01:24Z",
+      "baseRepository": "VMatrix1900/draft-pce-initiated-ip-tunnel",
+      "baseRefName": "main",
+      "baseRefOid": "6306400d3f42450679ad6bbb10ebce7f6080fb6e",
+      "headRepository": "VMatrix1900/draft-pce-initiated-ip-tunnel",
+      "headRefName": "agent/fix-template-sync-token",
+      "headRefOid": "6c6fca9c06d27037ea8aab551dbc82ac88853170",
+      "closedAt": "2026-08-03T09:01:21Z",
+      "mergedAt": "2026-08-03T09:01:21Z",
+      "mergedBy": "VMatrix1900",
+      "mergeCommit": {
+        "oid": "1b904792127f19707173f2e511892f6afacc5a39"
+      },
       "comments": [],
       "reviews": []
     }
